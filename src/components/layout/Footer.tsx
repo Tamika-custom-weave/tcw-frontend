@@ -17,7 +17,7 @@ export default function Footer() {
               Premium luxury hair extensions, custom wigs, and professional installation services tailored to perfection.
             </p>
           </div>
-          
+
           <div>
             <h4 className="font-serif text-lg mb-6 text-brand-gold">Shop</h4>
             <ul className="space-y-4 text-sm text-gray-400">
@@ -27,7 +27,7 @@ export default function Footer() {
               <li><Link href="/custom-wigs" className="hover:text-brand-gold transition-colors">Custom Wigs</Link></li>
             </ul>
           </div>
-          
+
           <div>
             <h4 className="font-serif text-lg mb-6 text-brand-gold">Client Care</h4>
             <ul className="space-y-4 text-sm text-gray-400">
@@ -37,19 +37,19 @@ export default function Footer() {
               <li><Link href="/book" className="hover:text-brand-gold transition-colors">Book Installation</Link></li>
             </ul>
           </div>
-          
+
           <div>
             <h4 className="font-serif text-lg mb-6 text-brand-gold">Newsletter</h4>
             <p className="text-sm text-gray-400 mb-4">
               Subscribe to receive updates, access to exclusive deals, and more.
             </p>
             <form className="flex flex-col space-y-3">
-              <input 
-                type="email" 
-                placeholder="Enter your email address" 
+              <input
+                type="email"
+                placeholder="Enter your email address"
                 className="bg-transparent border border-gray-700 py-3 px-4 text-sm focus:outline-none focus:border-brand-gold transition-colors"
               />
-              <button 
+              <button
                 type="submit"
                 className="bg-brand-gold text-brand-black font-semibold text-sm uppercase tracking-wider py-3 px-4 hover:bg-brand-gold-light transition-colors"
               >
@@ -58,7 +58,7 @@ export default function Footer() {
             </form>
           </div>
         </div>
-        
+
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
           <p>&copy; {new Date().getFullYear()} Tamika Custom Weave. All rights reserved.</p>
           <div className="flex space-x-6 mt-4 md:mt-0">

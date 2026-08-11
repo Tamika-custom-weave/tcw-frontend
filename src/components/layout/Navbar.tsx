@@ -1,63 +1,132 @@
+"use client"
 import Link from "next/link";
-import React from "react";
+import Image from "next/image";
+import React, { useState } from "react";
+import { FiMenu, FiGlobe, FiShoppingBag, FiUser, FiSearch } from "react-icons/fi";
 
 export default function Navbar() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   return (
-    <nav className="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-20">
-          {/* Mobile Menu Button (placeholder) */}
-          <div className="flex items-center md:hidden">
-            <button className="text-gray-900 focus:outline-none">
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
-            </button>
+    <header className="sticky top-0 z-50 w-full border-b border-[#a89d7e] bg-pure-white flex flex-col">
+      {/* Top Bar */}
+      <div className="w-full border-b border-[#a89d7e] bg-pure-white h-[28px] flex items-center">
+        {/* Left vertical border divider */}
+        <div className="w-[16px] md:w-[24px] h-full border-r border-[#a89d7e] flex-shrink-0" />
+
+        {/* Top Bar Content */}
+        <div className="flex-grow flex items-center justify-between px-[8px] md:px-[16px] h-full">
+          <div className="text-[10px] leading-none tracking-[0.05em] uppercase text-obsidian-black font-sans">
+            TCW
           </div>
-          
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8">
-            <Link href="/shop" className="text-sm tracking-widest uppercase hover:text-brand-gold transition-colors">Shop</Link>
-            <Link href="/custom-wigs" className="text-sm tracking-widest uppercase hover:text-brand-gold transition-colors">Custom Wigs</Link>
-            <Link href="/about" className="text-sm tracking-widest uppercase hover:text-brand-gold transition-colors">Our Story</Link>
+          <div className="text-[10px] leading-none tracking-[0.05em] uppercase text-obsidian-black font-sans">
+            Language (EN)
+          </div>
+        </div>
+
+        {/* Right vertical border divider */}
+        <div className="w-[16px] md:w-[24px] h-full border-l border-[#a89d7e] flex-shrink-0" />
+      </div>
+
+      {/* Main Navbar */}
+      <div className="w-full h-[56px] flex items-center relative">
+        {/* Left vertical border divider */}
+        <div className="w-[16px] md:w-[24px] h-full border-r border-[#a89d7e] flex-shrink-0" />
+
+        {/* Main Navbar Content */}
+        <div className="flex-grow h-full flex items-center justify-between px-[8px] md:px-[16px]">
+          {/* Left: Desktop Navigation & Mobile Navigation (Hamburger + Globe) */}
+          <div className="flex items-center">
+            {/* Desktop Navigation */}
+            <div className="hidden md:flex items-center space-x-[8px]">
+              <Link href="/shop" className="bg-[#F8F5ED] hover:bg-[#f0ece0] text-obsidian-black rounded-full px-[16px] py-[8px] text-[10px] leading-none tracking-[0.05em] uppercase font-sans transition-colors">
+                Products
+              </Link>
+              <Link href="/customize" className="bg-[#F8F5ED] hover:bg-[#f0ece0] text-obsidian-black rounded-full px-[16px] py-[8px] text-[10px] leading-none tracking-[0.05em] uppercase font-sans transition-colors">
+                Customize
+              </Link>
+            </div>
+
+            {/* Mobile Navigation (Hamburger + Globe) */}
+            <div className="flex md:hidden items-center space-x-[6px]">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="w-[36px] h-[36px] rounded-full bg-[#F8F5ED] hover:bg-[#f0ece0] flex items-center justify-center text-obsidian-black focus:outline-none"
+              >
+                <FiMenu size={20} />
+              </button>
+              <button className="w-[36px] h-[36px] rounded-full bg-[#F8F5ED] hover:bg-[#f0ece0] flex items-center justify-center text-obsidian-black">
+                <FiGlobe size={18} />
+              </button>
+            </div>
           </div>
 
-          {/* Logo */}
-          <div className="flex-shrink-0 flex items-center justify-center">
-            <Link href="/" className="font-serif text-2xl md:text-3xl font-bold tracking-tight text-center">
-              TCW
-              <span className="block text-[0.65rem] md:text-xs font-sans tracking-[0.3em] font-normal uppercase text-gray-500 mt-1">
-                Tamika Custom Weave
-              </span>
+          {/* Center: Logo centered absolutely */}
+          <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+            <Link
+              href="/"
+              className="flex items-center justify-center hover:opacity-90 transition-opacity"
+            >
+              <Image
+                src="/tamikas-logo.png"
+                alt="Tamika's Custom Weave"
+                width={200}
+                height={54}
+                className="h-[54px] w-auto object-contain"
+                priority
+              />
             </Link>
           </div>
 
-          {/* Icons */}
-          <div className="flex items-center space-x-6">
-            <button className="text-gray-900 hover:text-brand-gold transition-colors">
+          {/* Right: Cart and Search/Account inside circular buttons */}
+          <div className="flex items-center space-x-[6px] md:space-x-[8px]">
+            {/* Search Button (Desktop only) */}
+            <button className="hidden md:flex w-[36px] h-[36px] rounded-full bg-[#F8F5ED] hover:bg-[#f0ece0] items-center justify-center text-obsidian-black transition-colors">
               <span className="sr-only">Search</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+              <FiSearch size={20} />
             </button>
-            <button className="hidden md:block text-gray-900 hover:text-brand-gold transition-colors">
-              <span className="sr-only">Account</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-              </svg>
-            </button>
-            <button className="text-gray-900 hover:text-brand-gold transition-colors relative">
+
+            {/* Cart Button (Always visible) */}
+            <button className="w-[36px] h-[36px] rounded-full bg-[#F8F5ED] hover:bg-[#f0ece0] flex items-center justify-center text-obsidian-black transition-colors relative">
               <span className="sr-only">Cart</span>
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-              </svg>
-              <span className="absolute -top-1 -right-2 bg-brand-gold text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">
+              <FiShoppingBag size={20} />
+              <span className="absolute -top-1 -right-1 bg-champagne-gold text-pure-white text-[9px] w-[14px] h-[14px] rounded-full flex items-center justify-center font-bold">
                 0
               </span>
             </button>
+
+            {/* Account Button (Mobile only) */}
+            <button className="flex md:hidden w-[36px] h-[36px] rounded-full bg-[#F8F5ED] hover:bg-[#f0ece0] items-center justify-center text-obsidian-black transition-colors">
+              <span className="sr-only">Account</span>
+              <FiUser size={20} />
+            </button>
           </div>
         </div>
+
+        {/* Right vertical border divider */}
+        <div className="w-[16px] md:w-[24px] h-full border-l border-[#a89d7e] flex-shrink-0" />
       </div>
-    </nav>
+
+      {/* Mobile Drawer Menu */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden w-full border-t border-[#a89d7e] bg-pure-white flex flex-col py-[16px] px-[16px] space-y-[12px] animate-fadeIn">
+          <Link
+            href="/shop"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-[12px] leading-none tracking-[0.05em] uppercase text-obsidian-black font-sans hover:text-champagne-gold py-[8px]"
+          >
+            Products
+          </Link>
+          <Link
+            href="/customize"
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-[12px] leading-none tracking-[0.05em] uppercase text-obsidian-black font-sans hover:text-champagne-gold py-[8px]"
+          >
+            Customize
+          </Link>
+        </div>
+      )}
+    </header>
+
   );
 }
