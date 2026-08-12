@@ -67,7 +67,7 @@ export default function Hero() {
       onMouseLeave={() => setIsPaused(false)}
     >
       {/* Main Slider Container */}
-      <div className="relative w-full h-[65vh] md:h-[70vh] lg:h-[calc(100vh-84px)] min-h-[480px] lg:min-h-[650px] overflow-hidden lg:rounded-none bg-obsidian-black border border-[#a89d7e] lg:border-x-0 lg:border-t-0">
+      <div className="relative w-full h-[65vh] md:h-[70vh] lg:h-[calc(100vh-84px)] min-h-[480px] lg:min-h-[650px] overflow-hidden lg:rounded-none bg-obsidian-black border border-[#a89d7e]/30 lg:border-x-0 lg:border-t-0">
 
         {/* Top Segment Progress Bars (Hidden on Big Screens - lg:hidden) */}
         <div className="absolute top-4 left-4 right-4 z-30 flex lg:hidden gap-2 max-w-md mx-auto md:max-w-xl">

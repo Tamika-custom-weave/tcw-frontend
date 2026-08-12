@@ -8,11 +8,11 @@ export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-[#a89d7e] bg-pure-white flex flex-col">
+    <header className="sticky top-0 z-50 w-full border-b border-[#a89d7e]/30 bg-pure-white flex flex-col">
       {/* Top Bar */}
-      <div className="w-full border-b border-[#a89d7e] bg-pure-white h-[28px] flex items-center">
+      <div className="w-full border-b border-[#a89d7e]/30 bg-pure-white h-[28px] flex items-center">
         {/* Left vertical border divider */}
-        <div className="w-[16px] md:w-[24px] h-full border-r border-[#a89d7e] flex-shrink-0" />
+        <div className="w-[16px] md:w-[24px] h-full border-r border-[#a89d7e]/30 flex-shrink-0" />
 
         {/* Top Bar Content */}
         <div className="flex-grow flex items-center justify-between px-[8px] md:px-[16px] h-full">
@@ -25,13 +25,13 @@ export default function Navbar() {
         </div>
 
         {/* Right vertical border divider */}
-        <div className="w-[16px] md:w-[24px] h-full border-l border-[#a89d7e] flex-shrink-0" />
+        <div className="w-[16px] md:w-[24px] h-full border-l border-[#a89d7e]/30 flex-shrink-0" />
       </div>
 
       {/* Main Navbar */}
       <div className="w-full h-[56px] flex items-center relative">
         {/* Left vertical border divider */}
-        <div className="w-[16px] md:w-[24px] h-full border-r border-[#a89d7e] flex-shrink-0" />
+        <div className="w-[16px] md:w-[24px] h-full border-r border-[#a89d7e]/30 flex-shrink-0" />
 
         {/* Main Navbar Content */}
         <div className="flex-grow h-full flex items-center justify-between px-[8px] md:px-[16px]">
@@ -104,12 +104,12 @@ export default function Navbar() {
         </div>
 
         {/* Right vertical border divider */}
-        <div className="w-[16px] md:w-[24px] h-full border-l border-[#a89d7e] flex-shrink-0" />
+        <div className="w-[16px] md:w-[24px] h-full border-l border-[#a89d7e]/30 flex-shrink-0" />
       </div>
 
       {/* Mobile Drawer Menu */}
       {isMobileMenuOpen && (
-        <div className="md:hidden w-full border-t border-[#a89d7e] bg-pure-white flex flex-col py-[16px] px-[16px] space-y-[12px] animate-fadeIn">
+        <div className="md:hidden w-full border-t border-[#a89d7e]/30 bg-pure-white flex flex-col py-[16px] px-[16px] space-y-[12px] animate-fadeIn">
           <Link
             href="/shop"
             onClick={() => setIsMobileMenuOpen(false)}

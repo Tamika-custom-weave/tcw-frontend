@@ -114,15 +114,15 @@ export default function ShopCollection() {
   }, []);
 
   return (
-    <section className="w-full bg-pure-white border-b border-[#a89d7e]">
+    <section className="w-full bg-pure-white">
       <div className="w-full flex min-h-full">
         {/* Left Vertical Line Demarcation (matching Navbar) */}
-        <div className="w-[16px] md:w-[24px] lg:w-[32px] border-r border-[#a89d7e] flex-shrink-0" />
+        <div className="w-[16px] md:w-[24px] border-r border-[#a89d7e]/30 flex-shrink-0" />
 
         {/* Main Content Container with extra side spacing */}
-        <div className="flex-grow py-12 md:py-16 lg:py-20 px-6 sm:px-10 md:px-14 lg:px-20 max-w-[1440px] mx-auto w-full">
-          {/* Header Section with horizontal line demarcation */}
-          <div className="mb-10 sm:mb-12 border-b border-[#a89d7e] pb-8 md:pb-10">
+        <div className="flex-grow py-16 md:py-20 lg:py-24 px-8 sm:px-12 md:px-16 lg:px-24 w-full">
+          {/* Header Section */}
+          <div className="mb-12 sm:mb-16">
             <div className="flex items-center gap-2 mb-3">
               <span className="w-2.5 h-2.5 bg-obsidian-black inline-block flex-shrink-0" />
               <span className="text-obsidian-black text-[11px] tracking-[0.15em] uppercase font-mono font-bold">
@@ -172,7 +172,7 @@ export default function ShopCollection() {
 
           {/* Empty State */}
           {!loading && !error && categories.length === 0 && (
-            <div className="p-12 border border-[#a89d7e] rounded-[16px] text-center max-w-xl mx-auto my-8">
+            <div className="p-12 border border-[#a89d7e]/30 rounded-[16px] text-center max-w-xl mx-auto my-8">
               <p className="text-iron-gray text-[15px]">
                 No active collections available at the moment.
               </p>
@@ -181,7 +181,7 @@ export default function ShopCollection() {
 
           {/* Categories Grid - Boxed layout with demarcations */}
           {!loading && !error && categories.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-3 border border-[#a89d7e] overflow-hidden divide-y md:divide-y-0 md:divide-x divide-[#a89d7e]">
+            <div className="grid grid-cols-1 md:grid-cols-3 border-t border-[#a89d7e]/30 -mx-8 sm:-mx-12 md:-mx-16 lg:-mx-24 divide-y md:divide-y-0 md:divide-x divide-[#a89d7e]">
               {categories.map((category, idx) => {
                 const imageSrc =
                   category.image && category.image.trim() !== ""
@@ -191,10 +191,13 @@ export default function ShopCollection() {
                 const formattedTitle = formatCategoryName(category.name);
 
                 return (
-                  <div key={category._id} className="p-4 sm:p-6 lg:p-8 bg-pure-white">
+                  <div 
+                    key={category._id} 
+                    className={`bg-pure-white py-6 sm:py-8 md:py-10 lg:py-12 px-8 sm:px-10 md:px-4 lg:px-6 ${idx % 3 === 0 ? 'md:pl-14 lg:pl-20' : ''} ${idx % 3 === 2 ? 'md:pr-14 lg:pr-20' : ''}`}
+                  >
                     <Link
                       href={`/shop?category=${category.slug}`}
-                      className="group relative w-full aspect-[16/16] bg-obsidian-black border border-[#a89d7e] rounded-[16px] overflow-hidden transition-all duration-300 hover:shadow-xl block min-w-0"
+                      className="group relative w-full aspect-[16/16] bg-obsidian-black border border-[#a89d7e]/30 rounded-[16px] overflow-hidden transition-all duration-300 hover:shadow-xl block min-w-0"
                     >
                       {/* Background Category Image */}
                       <Image
@@ -235,7 +238,7 @@ export default function ShopCollection() {
         </div>
 
         {/* Right Vertical Line Demarcation (matching Navbar) */}
-        <div className="w-[16px] md:w-[24px] lg:w-[32px] border-l border-[#a89d7e] flex-shrink-0" />
+        <div className="w-[16px] md:w-[24px] border-l border-[#a89d7e]/30 flex-shrink-0" />
       </div>
     </section>
   );

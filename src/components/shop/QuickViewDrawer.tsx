@@ -1,0 +1,237 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { Product } from "@/services/api";
+
+interface QuickViewDrawerProps {
+  product: Product;
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewDrawerProps) {
+  const [selectedLength, setSelectedLength] = useState<string>("");
+  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [selectedTexture, setSelectedTexture] = useState<string>("");
+  const [selectedLaceType, setSelectedLaceType] = useState<string>("");
+  const [selectedColor, setSelectedColor] = useState<string>("");
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+      if (product.variants?.length > 0) {
+        const firstVariant = product.variants[0];
+        if (firstVariant.length) setSelectedLength(firstVariant.length);
+        if (firstVariant.size) setSelectedSize(firstVariant.size);
+        if (firstVariant.texture) setSelectedTexture(firstVariant.texture);
+        if (firstVariant.laceType) setSelectedLaceType(firstVariant.laceType);
+        if (firstVariant.color) setSelectedColor(firstVariant.color);
+      }
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isOpen, product]);
+
+  if (!isOpen) return null;
+
+  const imageSrc = product.thumbnail?.url || product.images?.[0]?.url || "/products.jpg";
+
+  const availableLengths = Array.from(new Set(product.variants.map(v => v.length).filter(Boolean))) as string[];
+  const availableSizes = Array.from(new Set(product.variants.map(v => v.size).filter(Boolean))) as string[];
+  const availableTextures = Array.from(new Set(product.variants.map(v => v.texture).filter(Boolean))) as string[];
+  const availableLaceTypes = Array.from(new Set(product.variants.map(v => v.laceType).filter(Boolean))) as string[];
+  const availableColors = Array.from(new Set(product.variants.map(v => v.color).filter(Boolean))) as string[];
+
+  const currentVariant = product.variants.find(v => 
+    (!v.length || v.length === selectedLength) &&
+    (!v.size || v.size === selectedSize) &&
+    (!v.texture || v.texture === selectedTexture) &&
+    (!v.laceType || v.laceType === selectedLaceType) &&
+    (!v.color || v.color === selectedColor)
+  );
+
+  const price = currentVariant ? currentVariant.price : (product.variants?.[0]?.price || 0);
+  const originalPrice = price * 1.25;
+
+  return (
+    <div className="fixed inset-0 z-[100] flex justify-end">
+      <div 
+        className="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+        onClick={onClose}
+      />
+
+      <div className="relative w-full max-w-md h-full bg-white flex flex-col shadow-2xl animate-slideInRight">
+        <div className="flex justify-between items-center p-6 border-b border-[#a89d7e]/30">
+          <h2 className="text-obsidian-black font-mono font-bold text-[13px] uppercase tracking-widest">
+            SELECT OPTIONS
+          </h2>
+          <button 
+            onClick={onClose}
+            className="text-obsidian-black hover:text-champagne-gold transition-colors"
+          >
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto p-6">
+          <div className="relative w-full aspect-square bg-[#f4f4f4] mb-6 flex items-center justify-center p-4">
+            <Image
+              src={imageSrc}
+              alt={product.name}
+              fill
+              className="object-contain"
+            />
+          </div>
+
+          <h3 className="text-obsidian-black font-mono font-bold text-[15px] uppercase tracking-wider mb-2">
+            {product.name}
+          </h3>
+          
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-obsidian-black font-mono font-bold text-[13px]">
+              ${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+            </span>
+          </div>
+
+          <div className="space-y-6 mb-8">
+            {availableColors.length > 0 && (
+              <div>
+                <p className="text-obsidian-black font-mono font-bold text-[11px] uppercase tracking-widest mb-3">
+                  COLOR: <span className="font-normal text-iron-gray">{selectedColor || "Select"}</span>
+                </p>
+                <div className="flex gap-2 flex-wrap">
+                  {availableColors.map((color, idx) => (
+                    <button 
+                      key={idx} 
+                      onClick={() => setSelectedColor(color)}
+                      className={`px-3 py-1.5 border text-[11px] font-mono transition-colors uppercase ${
+                        selectedColor === color
+                          ? "border-obsidian-black text-obsidian-black bg-gray-50"
+                          : "border-gray-300 text-iron-gray hover:border-black hover:text-black"
+                      }`}
+                    >
+                      {color}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {availableLengths.length > 0 && (
+              <div>
+                <p className="text-obsidian-black font-mono font-bold text-[11px] uppercase tracking-widest mb-3">
+                  LENGTH: <span className="font-normal text-iron-gray">{selectedLength || "Select"}</span>
+                </p>
+                <div className="flex gap-2 flex-wrap">
+                  {availableLengths.map((len, idx) => (
+                    <button 
+                      key={idx} 
+                      onClick={() => setSelectedLength(len)}
+                      className={`px-3 py-1.5 border text-[11px] font-mono transition-colors uppercase ${
+                        selectedLength === len
+                          ? "border-obsidian-black text-obsidian-black bg-gray-50"
+                          : "border-gray-300 text-iron-gray hover:border-black hover:text-black"
+                      }`}
+                    >
+                      {len}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {availableSizes.length > 0 && (
+              <div>
+                <p className="text-obsidian-black font-mono font-bold text-[11px] uppercase tracking-widest mb-3">
+                  SIZE: <span className="font-normal text-iron-gray">{selectedSize || "Select"}</span>
+                </p>
+                <div className="flex gap-2 flex-wrap">
+                  {availableSizes.map((size, idx) => (
+                    <button 
+                      key={idx} 
+                      onClick={() => setSelectedSize(size)}
+                      className={`px-3 py-1.5 border text-[11px] font-mono transition-colors uppercase ${
+                        selectedSize === size
+                          ? "border-obsidian-black text-obsidian-black bg-gray-50"
+                          : "border-gray-300 text-iron-gray hover:border-black hover:text-black"
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {availableTextures.length > 0 && (
+              <div>
+                <p className="text-obsidian-black font-mono font-bold text-[11px] uppercase tracking-widest mb-3">
+                  TEXTURE: <span className="font-normal text-iron-gray">{selectedTexture || "Select"}</span>
+                </p>
+                <div className="flex gap-2 flex-wrap">
+                  {availableTextures.map((tex, idx) => (
+                    <button 
+                      key={idx} 
+                      onClick={() => setSelectedTexture(tex)}
+                      className={`px-3 py-1.5 border text-[11px] font-mono transition-colors uppercase ${
+                        selectedTexture === tex
+                          ? "border-obsidian-black text-obsidian-black bg-gray-50"
+                          : "border-gray-300 text-iron-gray hover:border-black hover:text-black"
+                      }`}
+                    >
+                      {tex}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {availableLaceTypes.length > 0 && (
+              <div>
+                <p className="text-obsidian-black font-mono font-bold text-[11px] uppercase tracking-widest mb-3">
+                  LACE TYPE: <span className="font-normal text-iron-gray">{selectedLaceType || "Select"}</span>
+                </p>
+                <div className="flex gap-2 flex-wrap">
+                  {availableLaceTypes.map((lace, idx) => (
+                    <button 
+                      key={idx} 
+                      onClick={() => setSelectedLaceType(lace)}
+                      className={`px-3 py-1.5 border text-[11px] font-mono transition-colors uppercase ${
+                        selectedLaceType === lace
+                          ? "border-obsidian-black text-obsidian-black bg-gray-50"
+                          : "border-gray-300 text-iron-gray hover:border-black hover:text-black"
+                      }`}
+                    >
+                      {lace}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          <div className="flex gap-4 mb-4 mt-auto">
+            <div className="flex items-center border border-gray-300 w-24">
+              <button className="px-3 py-2 text-gray-500 hover:text-black transition-colors">-</button>
+              <span className="flex-1 text-center font-mono text-[13px]">1</span>
+              <button className="px-3 py-2 text-gray-500 hover:text-black transition-colors">+</button>
+            </div>
+            <button className="flex-1 border border-black text-black hover:bg-black hover:text-white transition-colors duration-300 font-mono font-bold text-[11px] uppercase tracking-widest">
+              ADD TO CART
+            </button>
+          </div>
+
+          <button className="w-full bg-black text-white hover:bg-champagne-gold hover:text-black transition-colors duration-300 py-4 font-mono font-bold text-[11px] uppercase tracking-widest mb-8">
+            BUY IT NOW
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
