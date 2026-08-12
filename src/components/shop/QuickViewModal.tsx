@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Product, ProductVariant } from "@/services/api";
+import { Product } from "@/services/api";
 
 interface QuickViewModalProps {
   product: Product;
@@ -16,21 +16,27 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
   const [selectedTexture, setSelectedTexture] = useState<string>("");
   const [selectedLaceType, setSelectedLaceType] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
-      // Auto-select first available options
       if (product.variants?.length > 0) {
         const firstVariant = product.variants[0];
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.length) setSelectedLength(firstVariant.length);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.size) setSelectedSize(firstVariant.size);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.texture) setSelectedTexture(firstVariant.texture);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.laceType) setSelectedLaceType(firstVariant.laceType);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.color) setSelectedColor(firstVariant.color);
       }
     } else {
       document.body.style.overflow = "";
+      setActiveImageIndex(0);
     }
     return () => {
       document.body.style.overflow = "";

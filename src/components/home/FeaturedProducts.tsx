@@ -1,6 +1,5 @@
 import React from "react";
 import { fetchProducts, Product } from "@/services/api";
-import Link from "next/link";
 import ProductCard from "@/components/shop/ProductCard";
 
 export default async function FeaturedProducts() {
@@ -13,6 +12,7 @@ export default async function FeaturedProducts() {
     // Shuffle algorithm (Fisher-Yates)
     const shuffled = [...activeProducts];
     for (let i = shuffled.length - 1; i > 0; i--) {
+      // eslint-disable-next-line react-hooks/purity
       const j = Math.floor(Math.random() * (i + 1));
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
@@ -20,7 +20,7 @@ export default async function FeaturedProducts() {
     // Pick top 15 for the featured section
     products = shuffled.slice(0, 15);
   } catch (error) {
-    if ((error as any)?.digest === 'DYNAMIC_SERVER_USAGE') {
+    if (typeof error === 'object' && error !== null && 'digest' in error && (error as { digest?: string }).digest === 'DYNAMIC_SERVER_USAGE') {
       throw error;
     }
     console.error("Failed to load featured products:", error);

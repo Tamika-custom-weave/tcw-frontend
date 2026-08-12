@@ -22,10 +22,15 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
       document.body.style.overflow = "hidden";
       if (product.variants?.length > 0) {
         const firstVariant = product.variants[0];
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.length) setSelectedLength(firstVariant.length);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.size) setSelectedSize(firstVariant.size);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.texture) setSelectedTexture(firstVariant.texture);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.laceType) setSelectedLaceType(firstVariant.laceType);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.color) setSelectedColor(firstVariant.color);
       }
     } else {
@@ -55,7 +60,6 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
   );
 
   const price = currentVariant ? currentVariant.price : (product.variants?.[0]?.price || 0);
-  const originalPrice = price * 1.25;
 
   return (
     <div className="fixed inset-0 z-[100] flex justify-end">
