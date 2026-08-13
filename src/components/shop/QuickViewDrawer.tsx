@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Product } from "@/services/api";
+import { useCart } from "@/context/CartContext";
 
 interface QuickViewDrawerProps {
   product: Product;
@@ -16,6 +17,10 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
   const [selectedTexture, setSelectedTexture] = useState<string>("");
   const [selectedLaceType, setSelectedLaceType] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
+  const [quantity, setQuantity] = useState<number>(1);
+  const [isAdding, setIsAdding] = useState(false);
+
+  const { addToCart } = useCart();
 
   useEffect(() => {
     if (isOpen) {
@@ -24,17 +29,14 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
         const firstVariant = product.variants[0];
         // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.length) setSelectedLength(firstVariant.length);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.size) setSelectedSize(firstVariant.size);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.texture) setSelectedTexture(firstVariant.texture);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.laceType) setSelectedLaceType(firstVariant.laceType);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.color) setSelectedColor(firstVariant.color);
       }
     } else {
       document.body.style.overflow = "";
+      setQuantity(1);
     }
     return () => {
       document.body.style.overflow = "";
@@ -60,6 +62,21 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
   );
 
   const price = currentVariant ? currentVariant.price : (product.variants?.[0]?.price || 0);
+
+  const handleAddToCart = async () => {
+    if (!currentVariant) return;
+    setIsAdding(true);
+    const added = await addToCart({
+      itemType: "PRODUCT",
+      product: product._id,
+      variantSku: currentVariant.sku,
+      quantity
+    });
+    setIsAdding(false);
+    if (added) {
+      onClose();
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-[100] flex justify-end">
@@ -222,12 +239,16 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
 
           <div className="flex gap-4 mb-4 mt-auto">
             <div className="flex items-center border border-gray-300 w-24">
-              <button className="px-3 py-2 text-gray-500 hover:text-black transition-colors">-</button>
-              <span className="flex-1 text-center font-mono text-[13px]">1</span>
-              <button className="px-3 py-2 text-gray-500 hover:text-black transition-colors">+</button>
+              <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-3 py-2 text-gray-500 hover:text-black transition-colors">-</button>
+              <span className="flex-1 text-center font-mono text-[13px]">{quantity}</span>
+              <button onClick={() => setQuantity(quantity + 1)} className="px-3 py-2 text-gray-500 hover:text-black transition-colors">+</button>
             </div>
-            <button className="flex-1 border border-black text-black hover:bg-black hover:text-white transition-colors duration-300 font-mono font-bold text-[11px] uppercase tracking-widest">
-              ADD TO CART
+            <button 
+              onClick={handleAddToCart}
+              disabled={isAdding || !currentVariant}
+              className="flex-1 border border-black text-black hover:bg-black hover:text-white disabled:opacity-50 transition-colors duration-300 font-mono font-bold text-[11px] uppercase tracking-widest"
+            >
+              {isAdding ? "Adding..." : "ADD TO CART"}
             </button>
           </div>
 

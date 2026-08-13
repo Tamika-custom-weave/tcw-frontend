@@ -1,5 +1,4 @@
 import React from "react";
-import Link from "next/link";
 import { fetchCategories, fetchProducts, fetchProductsByCategory } from "@/services/api";
 import ProductCard from "@/components/shop/ProductCard";
 import ShopControls from "@/components/shop/ShopControls";
@@ -41,13 +40,18 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
           {/* Main Content: Product Grid */}
           <main className="flex-grow">
             {/* Header Section */}
-            <div className="mb-8 px-6 sm:px-8 md:px-12 lg:px-16 pt-12 md:pt-12">
-              <h1 className="text-[20px] sm:text-[26px] md:text-[32px] leading-[0.95] tracking-[-0.02em] text-obsidian-black uppercase font-sans font-bold mb-4">
-                {selectedCategory ? selectedCategory.name : "All Products"}
-              </h1>
+            <div className="border-b border-[#a89d7e]/30 px-6 sm:px-8 md:px-12 lg:px-16 py-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div className="flex items-center gap-3">
+                <span className="inline-block w-2 h-2 bg-obsidian-black mb-0.5"></span>
+                <h1 className="text-obsidian-black font-mono font-bold text-[16px] md:text-[20px] uppercase tracking-[0.15em] leading-none">
+                  {selectedCategory ? selectedCategory.name : "ALL PRODUCTS"}
+                </h1>
+              </div>
          
               {/* Functional Filter and Sort Bar */}
-              <ShopControls categories={categories} totalProducts={activeProducts.length} />
+              <div className="md:mb-1">
+                <ShopControls categories={categories} totalProducts={activeProducts.length} />
+              </div>
             </div>
 
             <div className="pb-16 w-full">

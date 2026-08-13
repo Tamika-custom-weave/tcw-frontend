@@ -1,9 +1,9 @@
 import React from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { fetchProductBySlug } from "@/services/api";
 import ProductGallery from "@/components/shop/ProductGallery";
+import ProductSelectors from "@/components/shop/ProductSelectors";
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -16,13 +16,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
   if (!product || !product.isActive) {
     notFound();
   }
-
-  const startingPrice = product.variants?.[0]?.price || 0;
-  
-  // Basic extraction of variant options for UI (assume consistent options across variants for now)
-  const availableLengths = Array.from(new Set(product.variants.map(v => v.length).filter(Boolean)));
-  const availableTextures = Array.from(new Set(product.variants.map(v => v.texture).filter(Boolean)));
-  const availableLaceTypes = Array.from(new Set(product.variants.map(v => v.laceType).filter(Boolean)));
 
   return (
     <div className="w-full min-h-screen bg-pure-white flex flex-col">
@@ -60,64 +53,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
             {product.name}
           </h1>
           
-          <div className="text-[20px] font-mono font-semibold text-obsidian-black mb-8">
-            ${startingPrice.toFixed(2)}
-          </div>
-
-          <div className="w-full h-px bg-[#a89d7e] mb-8" />
-
-          {/* Dummy Selectors based on variants */}
-          <div className="space-y-6 mb-10">
-            {availableLengths.length > 0 && (
-              <div>
-                <label className="block text-[11px] tracking-[0.15em] uppercase font-mono font-bold text-obsidian-black mb-3">
-                  Length
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {availableLengths.map(len => (
-                    <button key={len} className="px-4 py-2 border border-[#a89d7e]/30 text-[12px] font-medium text-iron-gray hover:border-obsidian-black hover:text-obsidian-black transition-colors">
-                      {len}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-            
-            {availableTextures.length > 0 && (
-              <div>
-                <label className="block text-[11px] tracking-[0.15em] uppercase font-mono font-bold text-obsidian-black mb-3">
-                  Texture
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {availableTextures.map(tex => (
-                    <button key={tex} className="px-4 py-2 border border-[#a89d7e]/30 text-[12px] font-medium text-iron-gray hover:border-obsidian-black hover:text-obsidian-black transition-colors">
-                      {tex}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {availableLaceTypes.length > 0 && (
-              <div>
-                <label className="block text-[11px] tracking-[0.15em] uppercase font-mono font-bold text-obsidian-black mb-3">
-                  Lace Type
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  {availableLaceTypes.map(lace => (
-                    <button key={lace} className="px-4 py-2 border border-[#a89d7e]/30 text-[12px] font-medium text-iron-gray hover:border-obsidian-black hover:text-obsidian-black transition-colors">
-                      {lace}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Add to Cart (UI Only) */}
-          <button className="w-full bg-obsidian-black text-pure-white hover:bg-champagne-gold py-4 text-[12px] uppercase tracking-[0.2em] font-semibold transition-colors duration-300 mb-10 shadow-lg">
-            Add To Cart
-          </button>
+          <ProductSelectors product={product} />
 
           {/* Description */}
           {product.description && (

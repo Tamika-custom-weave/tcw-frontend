@@ -3,6 +3,7 @@ import { Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { CartProvider } from "@/context/CartContext";
 
 const noto = Noto_Sans_JP({
   variable: "--font-noto",
@@ -26,9 +27,11 @@ export default function RootLayout({
       className={`${noto.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-brand-white text-brand-black">
-        <Navbar />
-        <main className="flex-grow">{children}</main>
-        <Footer />
+        <CartProvider>
+          <Navbar />
+          <main className="flex-grow">{children}</main>
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );

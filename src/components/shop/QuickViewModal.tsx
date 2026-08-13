@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Product } from "@/services/api";
+import { useCart } from "@/context/CartContext";
 
 interface QuickViewModalProps {
   product: Product;
@@ -16,7 +17,9 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
   const [selectedTexture, setSelectedTexture] = useState<string>("");
   const [selectedLaceType, setSelectedLaceType] = useState<string>("");
   const [selectedColor, setSelectedColor] = useState<string>("");
-  const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [isAdding, setIsAdding] = useState(false);
+
+  const { addToCart } = useCart();
 
   useEffect(() => {
     if (isOpen) {
@@ -25,18 +28,13 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
         const firstVariant = product.variants[0];
         // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.length) setSelectedLength(firstVariant.length);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.size) setSelectedSize(firstVariant.size);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.texture) setSelectedTexture(firstVariant.texture);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.laceType) setSelectedLaceType(firstVariant.laceType);
-        // eslint-disable-next-line react-hooks/set-state-in-effect
         if (firstVariant.color) setSelectedColor(firstVariant.color);
       }
     } else {
       document.body.style.overflow = "";
-      setActiveImageIndex(0);
     }
     return () => {
       document.body.style.overflow = "";
@@ -63,6 +61,21 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
   );
 
   const price = currentVariant ? currentVariant.price : (product.variants?.[0]?.price || 0);
+
+  const handleAddToCart = async () => {
+    if (!currentVariant) return;
+    setIsAdding(true);
+    const added = await addToCart({
+      itemType: "PRODUCT",
+      product: product._id,
+      variantSku: currentVariant.sku,
+      quantity: 1
+    });
+    setIsAdding(false);
+    if (added) {
+      onClose();
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-8 md:p-12">
@@ -237,8 +250,12 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
             )}
           </div>
 
-          <button className="w-full bg-black text-white hover:bg-champagne-gold hover:text-black transition-colors duration-300 py-4 sm:py-5 text-[13px] font-mono font-bold uppercase tracking-[0.15em] mt-auto">
-            + ADD TO CART
+          <button 
+            onClick={handleAddToCart}
+            disabled={isAdding || !currentVariant}
+            className="w-full bg-black text-white hover:bg-champagne-gold hover:text-black disabled:opacity-50 transition-colors duration-300 py-4 sm:py-5 text-[13px] font-mono font-bold uppercase tracking-[0.15em] mt-auto"
+          >
+            {isAdding ? "ADDING..." : "+ ADD TO CART"}
           </button>
         </div>
       </div>

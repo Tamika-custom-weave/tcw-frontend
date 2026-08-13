@@ -18,7 +18,7 @@ export default async function FeaturedProducts() {
     }
     
     // Pick top 15 for the featured section
-    products = shuffled.slice(0, 15);
+    products = shuffled.slice(0, 16);
   } catch (error) {
     if (typeof error === 'object' && error !== null && 'digest' in error && (error as { digest?: string }).digest === 'DYNAMIC_SERVER_USAGE') {
       throw error;
@@ -36,8 +36,9 @@ export default async function FeaturedProducts() {
 
         {/* Main Content */}
         <div className="flex-grow w-full">
-          <div className="px-8 sm:px-12 md:px-16 lg:px-24 pt-16 pb-16 border-b border-[#a89d7e]/30">
-            <h2 className="text-obsidian-black font-sans font-bold text-[16px] md:text-[20px] uppercase tracking-widest leading-none">
+          <div className="px-8 sm:px-12 md:px-16 lg:px-24 py-8 border-b border-[#a89d7e]/30 flex items-center gap-3">
+            <span className="inline-block w-1.5 h-1.5 bg-obsidian-black"></span>
+            <h2 className="text-obsidian-black font-mono font-bold text-[11px] md:text-[13px] uppercase tracking-[0.15em] leading-none mt-0.5">
               FEATURED PRODUCTS
             </h2>
           </div>

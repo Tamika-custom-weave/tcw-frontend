@@ -42,8 +42,6 @@ export default function ShopCollection() {
   const [error, setError] = useState<string | null>(null);
 
   const fetchCategories = useCallback(async () => {
-    // Note: To avoid the setState in effect warning, we only set state if mounted 
-    // or if the component is explicitly trying to refetch via the button.
     setLoading(true);
     setError(null);
     try {
@@ -114,74 +112,78 @@ export default function ShopCollection() {
   }, []);
 
   return (
-    <section className="w-full bg-pure-white">
+    <section className="w-full bg-pure-white text-obsidian-black tracking-wider">
       <div className="w-full flex min-h-full">
         {/* Left Vertical Line Demarcation (matching Navbar) */}
         <div className="w-[16px] md:w-[24px] border-r border-[#a89d7e]/30 flex-shrink-0" />
 
-        {/* Main Content Container with extra side spacing */}
-        <div className="flex-grow py-16 md:py-20 lg:py-24 px-8 sm:px-12 md:px-16 lg:px-24 w-full">
-          {/* Header Section */}
-          <div className="mb-12 sm:mb-16">
-            <div className="flex items-center gap-2 mb-3">
-              <span className="w-2.5 h-2.5 bg-obsidian-black inline-block flex-shrink-0" />
-              <span className="text-obsidian-black text-[11px] tracking-[0.15em] uppercase font-mono font-bold">
-                SHOP OUR COLLECTION
-              </span>
+        {/* Main Content Container */}
+        <div className="flex-grow w-full border-b border-[#a89d7e]/30">
+          
+          {/* Header Grid Section */}
+          <div className="w-full grid grid-cols-1 md:grid-cols-2 border-b border-[#a89d7e]/30">
+            {/* Title Column */}
+            <div className="p-8 sm:p-12 md:p-16 border-r-0 md:border-r border-[#a89d7e]/30 flex flex-col justify-center">
+              <div className="flex items-center gap-3 mb-8">
+                <span className="inline-block w-1.5 h-1.5 bg-obsidian-black"></span>
+                <span className="text-[10px] sm:text-[11px] tracking-[0.15em] uppercase font-mono text-neutral-500">
+                  SHOP OUR COLLECTION
+                </span>
+              </div>
+              <h2 className="text-4xl md:text-5xl lg:text-6xl uppercase leading-[1.1] font-mono mb-4">
+                LUXURY HAIR <br/>
+                EXTENSIONS
+              </h2>
+              <p className="font-mono text-neutral-500 text-xs sm:text-[13px] max-w-md leading-relaxed uppercase mt-4">
+                CUSTOM WIGS AND PRECISION LACE ATTACHMENTS TAILORED FOR THE PERFECT FIT.
+              </p>
             </div>
-            <h2 className="text-[22px] sm:text-[34px] md:text-[42px] lg:text-[45px] leading-[0.95] tracking-[-0.02em] text-obsidian-black uppercase font-sans font-bold mb-6 max-w-5xl">
-              LUXURY HAIR EXTENSIONS, CUSTOM WIGS AND PRECISION LACE ATTACHMENTS
-            </h2>
-            <div>
+            
+            {/* Action Area */}
+            <div className="p-8 sm:p-12 md:p-16 flex items-center border-t md:border-t-0 border-[#a89d7e]/30 bg-[#F9F7F4]/30">
               <Link
                 href="/shop"
-                className="inline-flex items-center justify-center bg-pure-white border border-obsidian-black hover:bg-obsidian-black hover:text-pure-white text-obsidian-black px-6 py-2.5 rounded-full text-[11px] uppercase tracking-wider font-semibold transition-all duration-300 shadow-sm"
+                className="group px-8 py-5 bg-transparent border border-obsidian-black text-obsidian-black font-mono text-[11px] uppercase tracking-widest hover:bg-obsidian-black hover:text-pure-white transition-all flex items-center w-fit"
               >
-                → TO THE PRODUCTS
+                <span className="inline-block w-1.5 h-1.5 bg-obsidian-black group-hover:bg-pure-white mr-4 transition-colors"></span>
+                TO THE PRODUCTS
               </Link>
             </div>
           </div>
 
-          {/* Loading Skeleton */}
+          {/* States */}
           {loading && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#a89d7e]/30 border-b border-[#a89d7e]/30">
               {[1, 2, 3].map((i) => (
-                <div
-                  key={i}
-                  className="w-full aspect-[16/11] bg-mist-gray rounded-[16px] animate-pulse"
-                />
+                <div key={i} className="w-full aspect-[4/5] bg-gray-100 animate-pulse p-8" />
               ))}
             </div>
           )}
 
-          {/* Error State */}
           {!loading && error && (
-            <div className="p-8 border border-red-200 bg-red-50/50 rounded-[16px] text-center max-w-xl mx-auto my-8">
-              <p className="text-obsidian-black font-medium text-[15px] mb-3">
-                Unable to load collections
-              </p>
-              <p className="text-ash-gray text-[13px] mb-6">{error}</p>
+            <div className="p-16 text-center border-b border-[#a89d7e]/30 bg-red-50/20">
+              <p className="font-mono text-obsidian-black uppercase text-[13px] mb-6">{error}</p>
               <button
                 onClick={fetchCategories}
-                className="inline-flex items-center justify-center bg-obsidian-black text-pure-white hover:bg-champagne-gold transition-colors px-6 py-2.5 rounded-full text-[11px] uppercase tracking-wider font-medium"
+                className="group px-8 py-4 border border-obsidian-black text-obsidian-black font-mono text-[11px] uppercase tracking-widest hover:bg-obsidian-black hover:text-white transition-all inline-flex items-center"
               >
-                Try Again
+                <span className="inline-block w-1.5 h-1.5 bg-obsidian-black group-hover:bg-white mr-4 transition-colors"></span>
+                TRY AGAIN
               </button>
             </div>
           )}
 
-          {/* Empty State */}
           {!loading && !error && categories.length === 0 && (
-            <div className="p-12 border border-[#a89d7e]/30 rounded-[16px] text-center max-w-xl mx-auto my-8">
-              <p className="text-iron-gray text-[15px]">
-                No active collections available at the moment.
+            <div className="p-16 text-center border-b border-[#a89d7e]/30">
+              <p className="font-mono text-neutral-500 uppercase text-[13px]">
+                NO ACTIVE COLLECTIONS AVAILABLE AT THE MOMENT.
               </p>
             </div>
           )}
 
-          {/* Categories Grid - Boxed layout with demarcations */}
+          {/* Categories Grid - Brutalist layout */}
           {!loading && !error && categories.length > 0 && (
-            <div className="grid grid-cols-1 md:grid-cols-3 border-t border-[#a89d7e]/30 -mx-8 sm:-mx-12 md:-mx-16 lg:-mx-24 divide-y md:divide-y-0 md:divide-x divide-[#a89d7e]">
+            <div className="flex md:grid overflow-x-auto md:overflow-visible md:grid-cols-3 md:divide-x divide-[#a89d7e]/30 border-b border-[#a89d7e]/30 snap-x snap-mandatory scrollbar-hide gap-4 md:gap-0 p-6 md:p-0 bg-neutral-50/30 md:bg-transparent">
               {categories.map((category, idx) => {
                 const imageSrc =
                   category.image && category.image.trim() !== ""
@@ -191,13 +193,10 @@ export default function ShopCollection() {
                 const formattedTitle = formatCategoryName(category.name);
 
                 return (
-                  <div 
-                    key={category._id} 
-                    className={`bg-pure-white py-6 sm:py-8 md:py-10 lg:py-12 px-8 sm:px-10 md:px-4 lg:px-6 ${idx % 3 === 0 ? 'md:pl-14 lg:pl-20' : ''} ${idx % 3 === 2 ? 'md:pr-14 lg:pr-20' : ''}`}
-                  >
+                  <div key={category._id} className="w-[75vw] sm:w-[50vw] md:w-full flex-shrink-0 snap-center group">
                     <Link
                       href={`/shop?category=${category.slug}`}
-                      className="group relative w-full aspect-[16/16] bg-obsidian-black border border-[#a89d7e]/30 rounded-[16px] overflow-hidden transition-all duration-300 hover:shadow-xl block min-w-0"
+                      className="relative w-full aspect-[4/5] flex flex-col justify-between p-6 md:p-8 bg-obsidian-black overflow-hidden transition-all duration-300 block border border-[#a89d7e]/30 md:border-none"
                     >
                       {/* Background Category Image */}
                       <Image
@@ -205,29 +204,29 @@ export default function ShopCollection() {
                         alt={category.name}
                         fill
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                        className="object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                        className="object-cover opacity-80 grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 ease-out"
                       />
 
                       {/* Gradient Overlay for legibility */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-black/10 transition-opacity duration-300" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/10 opacity-70 transition-opacity duration-300" />
 
-                      {/* Top-left small badge tag */}
-                      <div className="absolute top-4 left-4 sm:top-5 sm:left-5 z-10 flex items-center gap-2 text-pure-white text-[10px] tracking-[0.15em] uppercase font-mono font-medium">
-                        <span className="w-2 h-2 bg-pure-white inline-block" />
+                      {/* Top Content */}
+                      <div className="relative z-10 flex items-center gap-2 md:gap-3 text-pure-white text-[9px] md:text-[10px] sm:text-[11px] tracking-[0.15em] uppercase font-mono">
+                        <span className="w-1.5 h-1.5 bg-pure-white inline-block" />
                         <span>TCW COLLECTION</span>
                       </div>
 
-                      {/* Bottom Content Overlay */}
-                      <div className="absolute bottom-5 left-5 right-5 sm:bottom-6 sm:left-6 sm:right-6 z-10 flex flex-col items-start justify-end">
-                        {/* Category Title */}
-                        <h3 className="text-[22px] sm:text-[26px] lg:text-[28px] font-bold text-pure-white uppercase tracking-tight leading-none mb-3 group-hover:text-champagne-gold transition-colors duration-300">
+                      {/* Bottom Content */}
+                      <div className="relative z-10 flex flex-col items-start w-full">
+                        <h3 className="text-2xl sm:text-3xl lg:text-4xl font-mono text-pure-white uppercase leading-[1.1] mb-4 md:mb-6 group-hover:text-champagne-gold transition-colors duration-300">
                           {formattedTitle}
                         </h3>
 
-                        {/* Pill Button Overlay */}
-                        <span className="inline-flex items-center justify-center bg-pure-white text-obsidian-black group-hover:bg-champagne-gold group-hover:text-pure-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-full text-[10px] sm:text-[11px] uppercase tracking-wider font-semibold transition-all duration-300 shadow-md">
-                          → DISCOVER COLLECTION
-                        </span>
+                        {/* Square Brutalist Button */}
+                        <div className="w-full border border-white/50 text-white group-hover:bg-white group-hover:text-obsidian-black group-hover:border-white px-4 md:px-5 py-3 md:py-4 text-[9px] md:text-[10px] sm:text-[11px] uppercase tracking-wider font-mono transition-all duration-300 flex items-center justify-between">
+                          <span>DISCOVER</span>
+                          <span>→</span>
+                        </div>
                       </div>
                     </Link>
                   </div>
@@ -235,6 +234,7 @@ export default function ShopCollection() {
               })}
             </div>
           )}
+
         </div>
 
         {/* Right Vertical Line Demarcation (matching Navbar) */}
