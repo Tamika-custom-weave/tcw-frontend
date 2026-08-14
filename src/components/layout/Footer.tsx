@@ -19,10 +19,10 @@ export default function Footer() {
                 PRODUCTS
               </div>
               <ul className="space-y-3 text-neutral-300">
-                <li><Link href="/shop/bundles" className="hover:text-white transition-colors block">RAW BUNDLES</Link></li>
-                <li><Link href="/shop/closures" className="hover:text-white transition-colors block">LACE CLOSURES</Link></li>
-                <li><Link href="/shop/frontals" className="hover:text-white transition-colors block">HD FRONTALS</Link></li>
-                <li><Link href="/custom-wigs" className="hover:text-white transition-colors block">CUSTOM WIGS</Link></li>
+                <li><Link href="/shop?category=bundles" className="hover:text-white transition-colors block">RAW BUNDLES</Link></li>
+                <li><Link href="/shop?category=closures" className="hover:text-white transition-colors block">LACE CLOSURES</Link></li>
+                <li><Link href="/shop?category=frontals" className="hover:text-white transition-colors block">HD FRONTALS</Link></li>
+                <li><Link href="/customize" className="hover:text-white transition-colors block">CUSTOM WIGS</Link></li>
               </ul>
             </div>
 
@@ -33,7 +33,7 @@ export default function Footer() {
                 SERVICES
               </div>
               <ul className="space-y-3 text-neutral-300">
-                <li><Link href="/custom-wigs" className="hover:text-white transition-colors block">CUSTOMIZATION</Link></li>
+                <li><Link href="/customize" className="hover:text-white transition-colors block">CUSTOMIZATION</Link></li>
                 <li><Link href="/contact" className="hover:text-white transition-colors block">CONSULTATION</Link></li>
                 <li><Link href="/faq" className="hover:text-white transition-colors block">FAQ & SUPPORT</Link></li>
               </ul>
