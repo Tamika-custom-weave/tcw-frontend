@@ -49,6 +49,11 @@ export interface Product {
 }
 
 const getBaseUrl = () => {
+  if (typeof window === "undefined") {
+    // Server-side
+    return process.env.INTERNAL_API_URL || "http://localhost:5000/api";
+  }
+  // Client-side
   return process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 };
 
