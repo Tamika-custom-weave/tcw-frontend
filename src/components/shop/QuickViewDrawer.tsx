@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { Product } from "@/services/api";
+import { Product, addToCart as apiAddToCart, createCheckoutSession } from "@/services/api";
 import { useCart } from "@/context/CartContext";
 
 interface QuickViewDrawerProps {
@@ -19,6 +19,8 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
   const [selectedColor, setSelectedColor] = useState<string>("");
   const [quantity, setQuantity] = useState<number>(1);
   const [isAdding, setIsAdding] = useState(false);
+  const [isBuying, setIsBuying] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   const { addToCart } = useCart();
 
@@ -66,6 +68,7 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
   const handleAddToCart = async () => {
     if (!currentVariant) return;
     setIsAdding(true);
+    setCheckoutError(null);
     const added = await addToCart({
       itemType: "PRODUCT",
       product: product._id,
@@ -77,6 +80,40 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
       onClose();
     }
   };
+
+  const handleBuyNow = async () => {
+    if (!currentVariant) return;
+    setIsBuying(true);
+    setCheckoutError(null);
+    try {
+      const updatedCart = await apiAddToCart({
+        itemType: "PRODUCT",
+        product: product._id,
+        variantSku: currentVariant.sku,
+        quantity
+      });
+      
+      if (updatedCart && updatedCart.cartId) {
+        const url = await createCheckoutSession(updatedCart.cartId);
+        if (url) {
+          window.location.href = url;
+        } else {
+          setCheckoutError("Failed to initialize checkout.");
+        }
+      } else {
+        setCheckoutError("Failed to add item to cart.");
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setCheckoutError(err.message || "An error occurred.");
+      } else {
+        setCheckoutError("An error occurred.");
+      }
+    } finally {
+      setIsBuying(false);
+    }
+  };
+
 
   return (
     <div className="fixed inset-0 z-[100] flex justify-end">
@@ -245,15 +282,28 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
             </div>
             <button 
               onClick={handleAddToCart}
-              disabled={isAdding || !currentVariant}
+              disabled={isAdding || isBuying || !currentVariant}
               className="flex-1 border border-black text-black hover:bg-black hover:text-white disabled:opacity-50 transition-colors duration-300 font-mono font-bold text-[11px] uppercase tracking-widest"
             >
               {isAdding ? "Adding..." : "ADD TO CART"}
             </button>
           </div>
 
-          <button className="w-full bg-black text-white hover:bg-champagne-gold hover:text-black transition-colors duration-300 py-4 font-mono font-bold text-[11px] uppercase tracking-widest mb-8">
-            BUY IT NOW
+          {checkoutError && (
+            <div className="text-red-600 text-[11px] text-center font-sans mb-2">
+              {checkoutError}
+            </div>
+          )}
+          <button 
+            onClick={handleBuyNow}
+            disabled={isAdding || isBuying || !currentVariant}
+            className="w-full bg-black text-white hover:bg-champagne-gold hover:text-black disabled:opacity-50 transition-colors duration-300 py-4 font-mono font-bold text-[11px] uppercase tracking-widest mb-8 flex justify-center items-center"
+          >
+            {isBuying ? (
+              <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              "BUY IT NOW"
+            )}
           </button>
         </div>
       </div>

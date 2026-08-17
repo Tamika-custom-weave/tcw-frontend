@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Product } from "@/services/api";
+import { Product, addToCart as apiAddToCart, createCheckoutSession } from "@/services/api";
 import { useCart } from "@/context/CartContext";
 
 interface ProductSelectorsProps {
@@ -17,6 +17,8 @@ export default function ProductSelectors({ product }: ProductSelectorsProps) {
   const [selectedTexture, setSelectedTexture] = useState<string>(availableTextures.length === 1 ? availableTextures[0] : "");
   const [selectedLaceType, setSelectedLaceType] = useState<string>(availableLaceTypes.length === 1 ? availableLaceTypes[0] : "");
   const [isAdding, setIsAdding] = useState(false);
+  const [isBuying, setIsBuying] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   
   const { addToCart } = useCart();
 
@@ -31,6 +33,7 @@ export default function ProductSelectors({ product }: ProductSelectorsProps) {
   const handleAddToCart = async () => {
     if (!currentVariant) return;
     setIsAdding(true);
+    setCheckoutError(null);
     await addToCart({
       itemType: "PRODUCT",
       product: product._id,
@@ -39,6 +42,40 @@ export default function ProductSelectors({ product }: ProductSelectorsProps) {
     });
     setIsAdding(false);
   };
+
+  const handleBuyNow = async () => {
+    if (!currentVariant) return;
+    setIsBuying(true);
+    setCheckoutError(null);
+    try {
+      const updatedCart = await apiAddToCart({
+        itemType: "PRODUCT",
+        product: product._id,
+        variantSku: currentVariant.sku,
+        quantity: 1
+      });
+      
+      if (updatedCart && updatedCart.cartId) {
+        const url = await createCheckoutSession(updatedCart.cartId);
+        if (url) {
+          window.location.href = url;
+        } else {
+          setCheckoutError("Failed to initialize checkout.");
+        }
+      } else {
+        setCheckoutError("Failed to add item to cart.");
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setCheckoutError(err.message || "An error occurred.");
+      } else {
+        setCheckoutError("An error occurred.");
+      }
+    } finally {
+      setIsBuying(false);
+    }
+  };
+
 
   return (
     <>
@@ -119,13 +156,34 @@ export default function ProductSelectors({ product }: ProductSelectorsProps) {
         )}
       </div>
 
-      <button 
-        onClick={handleAddToCart}
-        disabled={isAdding || !currentVariant}
-        className="w-full bg-obsidian-black text-pure-white hover:bg-champagne-gold disabled:opacity-50 py-4 text-[12px] uppercase tracking-[0.2em] font-semibold transition-colors duration-300 mb-10 shadow-lg"
-      >
-        {isAdding ? "Adding..." : "Add To Cart"}
-      </button>
+      <div className="flex gap-4 mb-4">
+        <button 
+          onClick={handleAddToCart}
+          disabled={isAdding || isBuying || !currentVariant}
+          className="w-1/2 bg-white border border-obsidian-black text-obsidian-black hover:bg-obsidian-black hover:text-white disabled:opacity-50 py-4 text-[12px] uppercase tracking-[0.2em] font-semibold transition-colors duration-300 shadow-sm"
+        >
+          {isAdding ? "Adding..." : "Add To Cart"}
+        </button>
+
+        <button 
+          onClick={handleBuyNow}
+          disabled={isAdding || isBuying || !currentVariant}
+          className="w-1/2 bg-obsidian-black text-pure-white hover:bg-champagne-gold hover:text-obsidian-black disabled:opacity-50 py-4 text-[12px] uppercase tracking-[0.2em] font-semibold transition-colors duration-300 shadow-lg flex justify-center items-center"
+        >
+          {isBuying ? (
+            <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+          ) : (
+            "Buy It Now"
+          )}
+        </button>
+      </div>
+      
+      {checkoutError && (
+        <div className="text-red-600 text-[11px] text-center font-sans mb-10">
+          {checkoutError}
+        </div>
+      )}
+      {!checkoutError && <div className="mb-10"></div>}
     </>
   );
 }

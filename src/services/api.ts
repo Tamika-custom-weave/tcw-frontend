@@ -194,6 +194,7 @@ export interface CartItem {
 
 export interface Cart {
   _id: string;
+  cartId: string;
   items: CartItem[];
   subtotal: number;
   totalQuantity: number;
@@ -214,7 +215,14 @@ export const fetchCart = async (): Promise<Cart | null> => {
       credentials: "include",
       cache: "no-store",
     });
-    if (!res.ok) throw new Error("Failed to fetch cart");
+    if (res.status === 404) {
+      return null;
+    }
+    if (!res.ok) {
+        const errorText = await res.text();
+        console.error(`Failed to fetch cart: ${res.status} ${res.statusText} - ${errorText}`);
+        throw new Error("Failed to fetch cart");
+      }
     const json = await res.json();
     return json.success ? (json.data as Cart) : null;
   } catch (error) {
@@ -284,5 +292,25 @@ export const clearCart = async (): Promise<Cart | null> => {
   } catch (error) {
     console.error("Error clearing cart:", error);
     return null;
+  }
+};
+
+export const createCheckoutSession = async (cartId: string): Promise<string | null> => {
+  try {
+    const res = await fetch(`${getBaseUrl()}/payments/create-checkout-session`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ cartId }),
+    });
+    if (!res.ok) {
+      const errorData = await res.json().catch(() => ({}));
+      throw new Error(errorData.message || "Failed to create checkout session");
+    }
+    const json = await res.json();
+    return json.success ? json.url : null;
+  } catch (error) {
+    console.error("Error creating checkout session:", error);
+    throw error;
   }
 };

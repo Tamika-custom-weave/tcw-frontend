@@ -1,13 +1,37 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
 import { FiX, FiTrash2, FiMinus, FiPlus, FiShoppingBag } from "react-icons/fi";
 import { useCart } from "@/context/CartContext";
+import { createCheckoutSession } from "@/services/api";
 
 export default function CartDrawer() {
   const { cart, isLoading, isCartOpen, setIsCartOpen, updateQuantity, removeItem, clearCart } = useCart();
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
+
+  const handleCheckout = async () => {
+    if (!cart) return;
+    setIsCheckoutLoading(true);
+    setCheckoutError(null);
+    try {
+      const url = await createCheckoutSession(cart.cartId);
+      if (url) {
+        window.location.href = url;
+      } else {
+        setCheckoutError("Failed to initialize checkout. Please try again.");
+      }
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setCheckoutError(err.message || "An error occurred during checkout.");
+      } else {
+        setCheckoutError("An error occurred during checkout.");
+      }
+    } finally {
+      setIsCheckoutLoading(false);
+    }
+  };
 
   // Close drawer on escape key
   useEffect(() => {
@@ -166,13 +190,22 @@ export default function CartDrawer() {
             </div>
             
             <div className="space-y-3">
-              <Link
-                href="/checkout"
-                onClick={() => setIsCartOpen(false)}
-                className="flex items-center justify-center w-full py-4 bg-obsidian-black text-pure-white text-[11px] font-mono uppercase tracking-widest font-bold rounded-full hover:bg-champagne-gold hover:text-obsidian-black transition-all"
+              {checkoutError && (
+                <div className="text-red-600 text-[11px] text-center font-sans mb-2">
+                  {checkoutError}
+                </div>
+              )}
+              <button
+                onClick={handleCheckout}
+                disabled={isCheckoutLoading}
+                className="flex items-center justify-center w-full py-4 bg-obsidian-black text-pure-white text-[11px] font-mono uppercase tracking-widest font-bold rounded-full hover:bg-champagne-gold hover:text-obsidian-black transition-all disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                Checkout
-              </Link>
+                {isCheckoutLoading ? (
+                  <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  "Checkout"
+                )}
+              </button>
               
               <button 
                 onClick={() => clearCart()}
