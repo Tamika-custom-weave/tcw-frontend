@@ -66,6 +66,7 @@ export const fetchCategories = async (): Promise<Category[]> => {
     const json = await res.json();
     return json.success ? (json.data as Category[]) : [];
   } catch (error) {
+    if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
     console.error("Error fetching categories:", error);
     return [];
   }
@@ -80,6 +81,7 @@ export const fetchProducts = async (): Promise<Product[]> => {
     const json = await res.json();
     return json.success ? (json.data as Product[]) : [];
   } catch (error) {
+    if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
     console.error("Error fetching products:", error);
     return [];
   }
@@ -94,6 +96,7 @@ export const fetchProductsByCategory = async (categoryId: string): Promise<Produ
     const json = await res.json();
     return json.success ? (json.data as Product[]) : [];
   } catch (error) {
+    if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
     console.error("Error fetching products by category:", error);
     return [];
   }
@@ -108,6 +111,7 @@ export const fetchProductBySlug = async (slug: string): Promise<Product | null> 
     const json = await res.json();
     return json.success ? (json.data as Product) : null;
   } catch (error) {
+    if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
     console.error("Error fetching product by slug:", error);
     return null;
   }
@@ -118,17 +122,20 @@ export interface CustomWigOptionsResponse {
   laceSystems: Product[];
   headSizes: string[];
   wigStyles: string[];
+  stylingOptions: string[];
 }
 
 export interface PriceCalculationPayload {
   bundles: { product: string; variantSku: string; quantity: number }[];
   laceSystem: { product: string; variantSku: string } | null;
+  styling?: string;
 }
 
 export interface CreateCustomWigPayload extends PriceCalculationPayload {
   headSize: string;
   hairLength: string;
   wigStyle: string;
+  styling: string;
 }
 
 export const fetchCustomWigOptions = async (): Promise<CustomWigOptionsResponse | null> => {
@@ -140,6 +147,7 @@ export const fetchCustomWigOptions = async (): Promise<CustomWigOptionsResponse 
     const json = await res.json();
     return json.success ? (json.data as CustomWigOptionsResponse) : null;
   } catch (error) {
+    if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
     console.error("Error fetching custom wig options:", error);
     return null;
   }
@@ -156,6 +164,7 @@ export const calculateCustomWigPrice = async (payload: PriceCalculationPayload):
     const json = await res.json();
     return json.success ? json.data.totalPrice : null;
   } catch (error) {
+    if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
     console.error("Error calculating custom wig price:", error);
     return null;
   }
@@ -172,6 +181,7 @@ export const createCustomWig = async (payload: CreateCustomWigPayload): Promise<
     const json = await res.json();
     return json.success ? json.data._id : null;
   } catch (error) {
+    if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
     console.error("Error creating custom wig:", error);
     return null;
   }
@@ -181,13 +191,25 @@ export const createCustomWig = async (payload: CreateCustomWigPayload): Promise<
 // Cart API
 // ==========================================
 
+export interface CustomWig {
+  _id: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  laceSystem?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  bundles?: any[];
+  headSize: string;
+  hairLength: string;
+  wigStyle: string;
+  styling?: string;
+  totalPrice: number;
+}
+
 export interface CartItem {
   _id: string;
   itemType: "PRODUCT" | "CUSTOM_WIG";
   product?: Product;
   variantSku?: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  customWig?: any; // The populated custom wig object if needed
+  customWig?: CustomWig; // The populated custom wig object if needed
   quantity: number;
   priceAtAddition: number;
 }
@@ -226,6 +248,7 @@ export const fetchCart = async (): Promise<Cart | null> => {
     const json = await res.json();
     return json.success ? (json.data as Cart) : null;
   } catch (error) {
+    if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
     console.error("Error fetching cart:", error);
     return null;
   }
@@ -243,6 +266,7 @@ export const addToCart = async (payload: AddToCartPayload): Promise<Cart | null>
     const json = await res.json();
     return json.success ? (json.data as Cart) : null;
   } catch (error) {
+    if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
     console.error("Error adding to cart:", error);
     return null;
   }
@@ -260,6 +284,7 @@ export const updateCartItem = async (itemId: string, quantity: number): Promise<
     const json = await res.json();
     return json.success ? (json.data as Cart) : null;
   } catch (error) {
+    if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
     console.error("Error updating cart item:", error);
     return null;
   }
@@ -275,6 +300,7 @@ export const removeCartItem = async (itemId: string): Promise<Cart | null> => {
     const json = await res.json();
     return json.success ? (json.data as Cart) : null;
   } catch (error) {
+    if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
     console.error("Error removing cart item:", error);
     return null;
   }
@@ -290,6 +316,7 @@ export const clearCart = async (): Promise<Cart | null> => {
     const json = await res.json();
     return json.success ? (json.data as Cart) : null;
   } catch (error) {
+    if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
     console.error("Error clearing cart:", error);
     return null;
   }
@@ -310,6 +337,7 @@ export const createCheckoutSession = async (cartId: string): Promise<string | nu
     const json = await res.json();
     return json.success ? json.url : null;
   } catch (error) {
+    if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
     console.error("Error creating checkout session:", error);
     throw error;
   }

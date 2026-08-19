@@ -35,6 +35,7 @@ export default function WigBuilder({ options, onClose }: ExtendedWigBuilderProps
   const [bundles, setBundles] = useState<SelectedBundle[]>([]);
   const [headSize, setHeadSize] = useState<string>("");
   const [wigStyle, setWigStyle] = useState<string>("");
+  const [styling, setStyling] = useState<string>("");
   
   const [totalPrice, setTotalPrice] = useState<number | null>(null);
   const [isCalculatingPrice, setIsCalculatingPrice] = useState<boolean>(false);
@@ -70,7 +71,8 @@ export default function WigBuilder({ options, onClose }: ExtendedWigBuilderProps
       
       const payload = {
         laceSystem: laceSystem ? { product: laceSystem.product._id, variantSku: laceSystem.variantSku } : null,
-        bundles: bundles.map(b => ({ product: b.product._id, variantSku: b.variantSku, quantity: b.quantity }))
+        bundles: bundles.map(b => ({ product: b.product._id, variantSku: b.variantSku, quantity: b.quantity })),
+        styling
       };
 
       const price = await calculateCustomWigPrice(payload);
@@ -86,9 +88,9 @@ export default function WigBuilder({ options, onClose }: ExtendedWigBuilderProps
     }, 500); // 500ms debounce
 
     return () => clearTimeout(timer);
-  }, [laceSystem, bundles]);
+  }, [laceSystem, bundles, styling]);
 
-  const isValid = !!laceSystem && bundles.length > 0 && !!headSize && !!wigStyle;
+  const isValid = !!laceSystem && bundles.length > 0 && !!headSize && !!wigStyle && !!styling;
 
   const handleSubmit = async () => {
     if (!isValid) return;
@@ -100,7 +102,8 @@ export default function WigBuilder({ options, onClose }: ExtendedWigBuilderProps
       bundles: bundles.map(b => ({ product: b.product._id, variantSku: b.variantSku, quantity: b.quantity })),
       headSize,
       hairLength: computedHairLength,
-      wigStyle
+      wigStyle,
+      styling
     };
 
     const wigId = await createCustomWig(payload);
@@ -144,10 +147,13 @@ export default function WigBuilder({ options, onClose }: ExtendedWigBuilderProps
         <SizeAndStyleSelector 
           headSizes={options.headSizes} 
           wigStyles={options.wigStyles}
+          stylingOptions={options.stylingOptions || []}
           headSize={headSize} 
           onChangeHeadSize={setHeadSize}
           wigStyle={wigStyle} 
           onChangeWigStyle={setWigStyle}
+          styling={styling}
+          onChangeStyling={setStyling}
         />
       </div>
 
@@ -160,6 +166,7 @@ export default function WigBuilder({ options, onClose }: ExtendedWigBuilderProps
             headSize={headSize}
             hairLength={computedHairLength}
             wigStyle={wigStyle}
+            styling={styling}
             totalPrice={totalPrice}
             isCalculating={isCalculatingPrice}
             isSubmitting={isSubmitting}

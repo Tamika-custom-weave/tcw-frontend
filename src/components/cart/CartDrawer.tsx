@@ -121,7 +121,7 @@ export default function CartDrawer() {
                   price = item.price || (variant?.price ?? 0);
                 } else if (item.itemType === "CUSTOM_WIG" && item.customWig) {
                   title = "Custom Built Wig";
-                  subtitle = `${item.customWig.hairLength} ${item.customWig.wigStyle} - ${item.customWig.headSize} Size`;
+                  subtitle = `${item.customWig.hairLength} ${item.customWig.wigStyle} - ${item.customWig.headSize} Size${item.customWig.styling ? `, ${item.customWig.styling}` : ''}`;
                   // @ts-expect-error - price field from populated cart item
                   price = item.price || item.customWig.totalPrice;
                 }

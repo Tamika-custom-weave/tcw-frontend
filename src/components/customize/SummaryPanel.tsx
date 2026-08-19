@@ -9,6 +9,7 @@ interface SummaryPanelProps {
   headSize: string;
   hairLength: string;
   wigStyle: string;
+  styling: string;
   totalPrice: number | null;
   isCalculating: boolean;
   isSubmitting: boolean;
@@ -23,6 +24,7 @@ export default function SummaryPanel({
   headSize,
   hairLength,
   wigStyle,
+  styling,
   totalPrice,
   isCalculating,
   isSubmitting,
@@ -98,7 +100,13 @@ export default function SummaryPanel({
                 {wigStyle || <span className="text-iron-gray italic">--</span>}
               </p>
             </div>
-            <div className="col-span-2">
+            <div>
+              <p className="text-[10px] font-mono uppercase tracking-widest text-iron-gray mb-1">Styling</p>
+              <p className="text-[12px] font-sans text-obsidian-black">
+                {styling || <span className="text-iron-gray italic">--</span>}
+              </p>
+            </div>
+            <div>
               <p className="text-[10px] font-mono uppercase tracking-widest text-iron-gray mb-1">Length</p>
               <p className="text-[12px] font-sans text-obsidian-black">
                 {hairLength ? `${hairLength}"` : <span className="text-iron-gray italic">--</span>}

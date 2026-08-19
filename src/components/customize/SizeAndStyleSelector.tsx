@@ -9,6 +9,9 @@ interface SizeAndStyleSelectorProps {
   onChangeHeadSize: (val: string) => void;
   wigStyle: string;
   onChangeWigStyle: (val: string) => void;
+  stylingOptions: string[];
+  styling: string;
+  onChangeStyling: (val: string) => void;
 }
 
 export default function SizeAndStyleSelector({
@@ -17,7 +20,10 @@ export default function SizeAndStyleSelector({
   headSize,
   onChangeHeadSize,
   wigStyle,
-  onChangeWigStyle
+  onChangeWigStyle,
+  stylingOptions,
+  styling,
+  onChangeStyling
 }: SizeAndStyleSelectorProps) {
   return (
     <div className="p-8 md:p-12 border-b border-[#a89d7e]/30">
@@ -71,6 +77,28 @@ export default function SizeAndStyleSelector({
                 }`}
               >
                 {style}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Wig Styling */}
+        <div>
+          <label className="block text-[11px] font-mono uppercase tracking-widest text-obsidian-black font-bold mb-3">
+            Wig Styling
+          </label>
+          <div className="flex flex-wrap gap-3">
+            {stylingOptions?.map((opt) => (
+              <button
+                key={opt}
+                onClick={() => onChangeStyling(opt)}
+                className={`px-4 py-2.5 text-[11px] font-mono uppercase tracking-wider rounded-[4px] border transition-colors ${
+                  styling === opt
+                    ? "bg-obsidian-black text-pure-white border-obsidian-black"
+                    : "bg-pure-white text-obsidian-black border-concrete-gray hover:border-obsidian-black"
+                }`}
+              >
+                {opt}
               </button>
             ))}
           </div>
