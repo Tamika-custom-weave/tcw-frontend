@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import WigBuilderModal from "@/components/customize/WigBuilderModal";
+import dynamic from 'next/dynamic';
+const WigBuilderModal = dynamic(() => import("@/components/customize/WigBuilderModal"));
 
 export default function CustomWigCTA() {
   const [isModalOpen, setIsModalOpen] = useState(false);

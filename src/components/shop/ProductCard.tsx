@@ -4,8 +4,10 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Product } from "@/services/api";
-import QuickViewModal from "./QuickViewModal";
-import QuickViewDrawer from "./QuickViewDrawer";
+import dynamic from 'next/dynamic';
+
+const QuickViewModal = dynamic(() => import("./QuickViewModal"));
+const QuickViewDrawer = dynamic(() => import("./QuickViewDrawer"));
 
 interface ProductCardProps {
   product: Product;

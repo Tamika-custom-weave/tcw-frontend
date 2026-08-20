@@ -60,7 +60,7 @@ const getBaseUrl = () => {
 export const fetchCategories = async (): Promise<Category[]> => {
   try {
     const res = await fetch(`${getBaseUrl()}/categories`, {
-      cache: "no-store",
+      next: { revalidate: 3600 },
     });
     if (!res.ok) throw new Error("Failed to fetch categories");
     const json = await res.json();
@@ -75,7 +75,7 @@ export const fetchCategories = async (): Promise<Category[]> => {
 export const fetchProducts = async (): Promise<Product[]> => {
   try {
     const res = await fetch(`${getBaseUrl()}/products`, {
-      cache: "no-store",
+      next: { revalidate: 3600 },
     });
     if (!res.ok) throw new Error("Failed to fetch products");
     const json = await res.json();
@@ -90,7 +90,7 @@ export const fetchProducts = async (): Promise<Product[]> => {
 export const fetchProductsByCategory = async (categoryId: string): Promise<Product[]> => {
   try {
     const res = await fetch(`${getBaseUrl()}/products/category/${categoryId}`, {
-      cache: "no-store",
+      next: { revalidate: 3600 },
     });
     if (!res.ok) throw new Error("Failed to fetch products by category");
     const json = await res.json();
@@ -105,7 +105,7 @@ export const fetchProductsByCategory = async (categoryId: string): Promise<Produ
 export const fetchProductBySlug = async (slug: string): Promise<Product | null> => {
   try {
     const res = await fetch(`${getBaseUrl()}/products/slug/${slug}`, {
-      cache: "no-store",
+      next: { revalidate: 3600 },
     });
     if (!res.ok) throw new Error("Failed to fetch product by slug");
     const json = await res.json();
@@ -141,7 +141,7 @@ export interface CreateCustomWigPayload extends PriceCalculationPayload {
 export const fetchCustomWigOptions = async (): Promise<CustomWigOptionsResponse | null> => {
   try {
     const res = await fetch(`${getBaseUrl()}/custom-wigs/options`, {
-      cache: "no-store",
+      next: { revalidate: 3600 },
     });
     if (!res.ok) throw new Error("Failed to fetch custom wig options");
     const json = await res.json();

@@ -4,7 +4,8 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { FiMenu, FiShoppingBag, FiHome } from "react-icons/fi";
 import { useCart } from "@/context/CartContext";
-import CartDrawer from "../cart/CartDrawer";
+import dynamic from 'next/dynamic';
+const CartDrawer = dynamic(() => import("../cart/CartDrawer"));
 
 export default function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
