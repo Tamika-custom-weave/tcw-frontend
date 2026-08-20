@@ -49,7 +49,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
         {/* Right Column: Product Details */}
         <div className="w-full lg:w-1/2 p-6 sm:p-10 md:p-14 lg:p-16 flex flex-col">
-          <h1 className="text-[32px] sm:text-[40px] lg:text-[48px] leading-[0.95] tracking-[-0.02em] text-obsidian-black uppercase font-sans font-bold mb-4">
+          <h1 className="text-[32px] sm:text-[40px] lg:text-[48px] leading-[0.95] tracking-[-0.02em] text-obsidian-black uppercase font-sans font-bold mb-4 break-words">
             {product.name}
           </h1>
           

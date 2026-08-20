@@ -35,7 +35,7 @@ export default function SummaryPanel({
   const totalBundles = bundles.reduce((acc, curr) => acc + curr.quantity, 0);
 
   return (
-    <div className="p-8 md:p-12 flex flex-col h-full bg-pure-white">
+    <div className="p-8 lg:p-12 flex flex-col bg-pure-white">
       <h2 className="text-[16px] font-mono font-bold tracking-widest uppercase leading-none text-obsidian-black border-b border-concrete-gray pb-4 mb-6">
         Summary
       </h2>
@@ -117,7 +117,12 @@ export default function SummaryPanel({
       </div>
 
       {/* Price and Submit */}
-      <div className="mt-8 border-t border-[#a89d7e]/30 pt-6">
+      <div className="
+        border-t border-[#a89d7e]/30 
+        pt-4 pb-6 px-6 mt-8 
+        fixed bottom-0 left-0 right-0 z-[100] bg-pure-white shadow-[0_-8px_30px_rgba(0,0,0,0.15)] 
+        lg:static lg:p-0 lg:mt-8 lg:shadow-none lg:z-auto lg:bg-transparent
+      ">
         <div className="flex justify-between items-end mb-6">
           <span className="text-[14px] font-mono uppercase tracking-widest text-obsidian-black">Estimated Total</span>
           <div className="flex items-center h-[32px]">

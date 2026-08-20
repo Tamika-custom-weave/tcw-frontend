@@ -165,11 +165,11 @@ export default function ProductSelectors({ product }: ProductSelectorsProps) {
         )}
       </div>
 
-      <div className="flex gap-4 mb-4">
+      <div className="flex flex-col sm:flex-row gap-4 mb-4">
         <button 
           onClick={handleAddToCart}
           disabled={isAdding || isBuying || !currentVariant || currentVariant.stock <= 0}
-          className="w-1/2 bg-white border border-obsidian-black text-obsidian-black hover:bg-obsidian-black hover:text-white disabled:opacity-50 py-4 text-[12px] uppercase tracking-[0.2em] font-semibold transition-colors duration-300 shadow-sm"
+          className="w-full sm:w-1/2 bg-white border border-obsidian-black text-obsidian-black hover:bg-obsidian-black hover:text-white disabled:opacity-50 py-4 text-[12px] uppercase tracking-[0.2em] font-semibold transition-colors duration-300 shadow-sm"
         >
           {isAdding ? "Adding..." : (currentVariant?.stock && currentVariant.stock > 0 ? "Add To Cart" : "Out of Stock")}
         </button>
@@ -177,7 +177,7 @@ export default function ProductSelectors({ product }: ProductSelectorsProps) {
         <button 
           onClick={handleBuyNow}
           disabled={isAdding || isBuying || !currentVariant || currentVariant.stock <= 0}
-          className="w-1/2 bg-obsidian-black text-pure-white hover:bg-champagne-gold hover:text-obsidian-black disabled:opacity-50 py-4 text-[12px] uppercase tracking-[0.2em] font-semibold transition-colors duration-300 shadow-lg flex justify-center items-center"
+          className="w-full sm:w-1/2 bg-obsidian-black text-pure-white hover:bg-champagne-gold hover:text-obsidian-black disabled:opacity-50 py-4 text-[12px] uppercase tracking-[0.2em] font-semibold transition-colors duration-300 shadow-lg flex justify-center items-center"
         >
           {isBuying ? (
             <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>

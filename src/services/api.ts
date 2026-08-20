@@ -322,13 +322,13 @@ export const clearCart = async (): Promise<Cart | null> => {
   }
 };
 
-export const createCheckoutSession = async (cartId: string): Promise<string | null> => {
+export const createCheckoutSession = async (cartId: string, cartItemId?: string): Promise<string | null> => {
   try {
     const res = await fetch(`${getBaseUrl()}/payments/create-checkout-session`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ cartId }),
+      body: JSON.stringify({ cartId, cartItemId }),
     });
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}));

@@ -8,15 +8,15 @@ import { createCheckoutSession } from "@/services/api";
 
 export default function CartDrawer() {
   const { cart, isLoading, isCartOpen, setIsCartOpen, updateQuantity, removeItem, clearCart } = useCart();
-  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+  const [checkoutLoadingId, setCheckoutLoadingId] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
-  const handleCheckout = async () => {
+  const handleCheckout = async (cartItemId?: string) => {
     if (!cart) return;
-    setIsCheckoutLoading(true);
+    setCheckoutLoadingId(cartItemId || "ALL");
     setCheckoutError(null);
     try {
-      const url = await createCheckoutSession(cart.cartId);
+      const url = await createCheckoutSession(cart.cartId, cartItemId);
       if (url) {
         window.location.href = url;
       } else {
@@ -28,7 +28,7 @@ export default function CartDrawer() {
       }
       setCheckoutError("An error occurred during checkout. Please try again later.");
     } finally {
-      setIsCheckoutLoading(false);
+      setCheckoutLoadingId(null);
     }
   };
 
@@ -160,22 +160,34 @@ export default function CartDrawer() {
                         <button 
                           onClick={() => updateQuantity(item._id, item.quantity - 1)}
                           disabled={item.quantity <= 1}
-                          className="w-8 h-8 flex items-center justify-center text-iron-gray hover:text-obsidian-black disabled:opacity-50 transition-colors focus:outline-none focus:ring-2 focus:ring-champagne-gold rounded-full"
+                          className="w-10 h-10 flex items-center justify-center text-iron-gray hover:text-obsidian-black disabled:opacity-50 transition-colors focus:outline-none focus:ring-2 focus:ring-champagne-gold rounded-full"
                           aria-label="Decrease quantity"
                         >
-                          <FiMinus size={14} />
+                          <FiMinus size={16} />
                         </button>
-                        <span className="text-[12px] font-mono font-bold w-6 text-center select-none">
+                        <span className="text-[13px] font-mono font-bold w-6 text-center select-none">
                           {item.quantity}
                         </span>
                         <button 
                           onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                          className="w-8 h-8 flex items-center justify-center text-iron-gray hover:text-obsidian-black transition-colors focus:outline-none focus:ring-2 focus:ring-champagne-gold rounded-full"
+                          className="w-10 h-10 flex items-center justify-center text-iron-gray hover:text-obsidian-black transition-colors focus:outline-none focus:ring-2 focus:ring-champagne-gold rounded-full"
                           aria-label="Increase quantity"
                         >
-                          <FiPlus size={14} />
+                          <FiPlus size={16} />
                         </button>
                       </div>
+
+                      <button
+                        onClick={() => handleCheckout(item._id)}
+                        disabled={!!checkoutLoadingId}
+                        className="mt-4 w-full py-2 bg-obsidian-black text-pure-white text-[10px] font-mono uppercase tracking-widest font-bold rounded-full hover:bg-champagne-gold hover:text-obsidian-black transition-all disabled:opacity-70 disabled:cursor-not-allowed flex justify-center items-center"
+                      >
+                        {checkoutLoadingId === item._id ? (
+                          <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                        ) : (
+                          "Checkout Item"
+                        )}
+                      </button>
                     </div>
                   </div>
                 );
@@ -201,14 +213,14 @@ export default function CartDrawer() {
                 </div>
               )}
               <button
-                onClick={handleCheckout}
-                disabled={isCheckoutLoading}
+                onClick={() => handleCheckout()}
+                disabled={!!checkoutLoadingId}
                 className="flex items-center justify-center w-full py-4 bg-obsidian-black text-pure-white text-[11px] font-mono uppercase tracking-widest font-bold rounded-full hover:bg-champagne-gold hover:text-obsidian-black transition-all disabled:opacity-70 disabled:cursor-not-allowed"
               >
-                {isCheckoutLoading ? (
+                {checkoutLoadingId === "ALL" ? (
                   <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
                 ) : (
-                  "Checkout"
+                  "Checkout All"
                 )}
               </button>
               

@@ -131,9 +131,9 @@ export default function WigBuilder({ options, onClose }: ExtendedWigBuilderProps
   };
 
   return (
-    <div className="flex flex-col lg:flex-row w-full relative h-full">
+    <div className="flex flex-col lg:flex-row w-full relative pb-40 lg:pb-0">
       {/* Left Column: Interactive Selectors */}
-      <div className="flex-grow min-w-0 lg:w-2/3 border-r border-[#a89d7e]/30 pb-16">
+      <div className="flex-grow min-w-0 lg:w-2/3 border-r border-[#a89d7e]/30 pb-32 lg:pb-16">
         <LaceSystemSelector 
           options={options.laceSystems} 
           selected={laceSystem} 
@@ -159,7 +159,7 @@ export default function WigBuilder({ options, onClose }: ExtendedWigBuilderProps
 
       {/* Right Column: Summary Panel */}
       <div className="w-full lg:w-1/3 bg-gray-50 border-t lg:border-t-0 border-[#a89d7e]/30">
-        <div className="sticky top-0 max-h-[100dvh] overflow-y-auto">
+        <div className="lg:sticky lg:top-0 lg:max-h-[100dvh] lg:overflow-y-auto">
           <SummaryPanel 
             laceSystem={laceSystem}
             bundles={bundles}

@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { useState } from "react";
-import { FiMenu, FiShoppingBag, FiUser } from "react-icons/fi";
+import { FiMenu, FiShoppingBag, FiHome } from "react-icons/fi";
 import { useCart } from "@/context/CartContext";
 import CartDrawer from "../cart/CartDrawer";
 
@@ -37,14 +37,11 @@ export default function Navbar() {
           <div className="w-[16px] md:w-[24px] h-full border-r border-[#a89d7e]/30 flex-shrink-0" />
 
           {/* Main Navbar Content */}
-          <div className="flex-grow h-full flex items-center justify-between">
+          <div className="flex-grow h-full flex items-center justify-between relative">
             {/* Left: Desktop Navigation & Mobile Navigation */}
             <div className="flex items-center h-full">
               {/* Desktop Navigation */}
               <div className="hidden md:flex h-full">
-                <Link href="/" className="flex items-center justify-center h-full border-r border-[#a89d7e]/30 px-[24px] text-[10px] tracking-[0.15em] uppercase font-mono text-obsidian-black hover:bg-neutral-50 hover:text-champagne-gold transition-colors">
-                  HOME
-                </Link>
                 <Link href="/shop" className="flex items-center justify-center h-full border-r border-[#a89d7e]/30 px-[24px] text-[10px] tracking-[0.15em] uppercase font-mono text-obsidian-black hover:bg-neutral-50 hover:text-champagne-gold transition-colors">
                   PRODUCTS
                 </Link>
@@ -57,15 +54,15 @@ export default function Navbar() {
               <div className="flex md:hidden items-center h-full border-r border-[#a89d7e]/30">
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="w-[64px] h-full flex items-center justify-center text-obsidian-black hover:bg-neutral-50 transition-colors focus:outline-none"
+                  className="w-[48px] h-full flex items-center justify-center text-obsidian-black hover:bg-neutral-50 transition-colors focus:outline-none"
                 >
                   <FiMenu size={20} />
                 </button>
               </div>
             </div>
 
-            {/* Center: Logo centered absolutely */}
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10">
+            {/* Center: Logo */}
+            <div className="flex-grow flex justify-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 z-10">
               <Link
                 href="/"
                 className="flex items-center justify-center hover:opacity-90 transition-opacity"
@@ -75,24 +72,24 @@ export default function Navbar() {
                   alt="Tamika's Custom Weave"
                   width={180}
                   height={48}
-                  className="h-[48px] w-auto object-contain"
+                  className="h-[36px] md:h-[48px] w-auto object-contain"
                   priority
                 />
               </Link>
             </div>
 
-            {/* Right: Cart and Search inside bordered grid cells */}
+            {/* Right: Cart and Home inside bordered grid cells */}
             <div className="flex items-center h-full">
-              {/* Account Button (Desktop only) */}
-              <button className="hidden md:flex w-[64px] h-full border-l border-[#a89d7e]/30 items-center justify-center text-obsidian-black hover:bg-neutral-50 transition-colors">
-                <span className="sr-only">Account</span>
-                <FiUser size={20} />
-              </button>
+              {/* Home Button */}
+              <Link href="/" className="hidden md:flex w-[48px] md:w-[64px] h-full border-l border-[#a89d7e]/30 items-center justify-center text-obsidian-black hover:bg-neutral-50 transition-colors">
+                <span className="sr-only">Home</span>
+                <FiHome size={20} />
+              </Link>
 
               {/* Cart Button (Always visible) */}
               <button 
                 onClick={() => setIsCartOpen(true)}
-                className="w-[64px] h-full border-l border-[#a89d7e]/30 flex items-center justify-center text-obsidian-black hover:bg-neutral-50 transition-colors relative"
+                className="w-[48px] md:w-[64px] h-full border-l border-[#a89d7e]/30 flex items-center justify-center text-obsidian-black hover:bg-neutral-50 transition-colors relative"
               >
                 <span className="sr-only">Cart</span>
                 <FiShoppingBag size={20} />
