@@ -92,19 +92,22 @@ export default function ProductSelectors({ product }: ProductSelectorsProps) {
               Length
             </label>
             <div className="flex flex-wrap gap-2">
-              {availableLengths.map(len => (
-                <button 
-                  key={len} 
-                  onClick={() => setSelectedLength(len)}
-                  className={`px-4 py-2 border text-[12px] font-medium transition-colors ${
-                    selectedLength === len 
-                      ? "border-obsidian-black text-obsidian-black bg-gray-50" 
-                      : "border-[#a89d7e]/30 text-iron-gray hover:border-obsidian-black hover:text-obsidian-black"
-                  }`}
-                >
-                  {len}
-                </button>
-              ))}
+              {availableLengths.map(len => {
+                const isSelected = selectedLength === len;
+                return (
+                  <button 
+                    key={len} 
+                    onClick={() => setSelectedLength(len)}
+                    className={`px-4 py-2 border text-[12px] font-medium transition-all ${
+                      isSelected 
+                        ? "border-obsidian-black ring-1 ring-obsidian-black text-obsidian-black bg-neutral-100 shadow-inner" 
+                        : "border-[#a89d7e]/30 text-iron-gray hover:border-obsidian-black hover:text-obsidian-black bg-white"
+                    }`}
+                  >
+                    {len}
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -115,19 +118,22 @@ export default function ProductSelectors({ product }: ProductSelectorsProps) {
               Texture
             </label>
             <div className="flex flex-wrap gap-2">
-              {availableTextures.map(tex => (
-                <button 
-                  key={tex} 
-                  onClick={() => setSelectedTexture(tex)}
-                  className={`px-4 py-2 border text-[12px] font-medium transition-colors ${
-                    selectedTexture === tex 
-                      ? "border-obsidian-black text-obsidian-black bg-gray-50" 
-                      : "border-[#a89d7e]/30 text-iron-gray hover:border-obsidian-black hover:text-obsidian-black"
-                  }`}
-                >
-                  {tex}
-                </button>
-              ))}
+              {availableTextures.map(tex => {
+                const isSelected = selectedTexture === tex;
+                return (
+                  <button 
+                    key={tex} 
+                    onClick={() => setSelectedTexture(tex)}
+                    className={`px-4 py-2 border text-[12px] font-medium transition-all ${
+                      isSelected 
+                        ? "border-obsidian-black ring-1 ring-obsidian-black text-obsidian-black bg-neutral-100 shadow-inner" 
+                        : "border-[#a89d7e]/30 text-iron-gray hover:border-obsidian-black hover:text-obsidian-black bg-white"
+                    }`}
+                  >
+                    {tex}
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -138,19 +144,22 @@ export default function ProductSelectors({ product }: ProductSelectorsProps) {
               Lace Type
             </label>
             <div className="flex flex-wrap gap-2">
-              {availableLaceTypes.map(lace => (
-                <button 
-                  key={lace} 
-                  onClick={() => setSelectedLaceType(lace)}
-                  className={`px-4 py-2 border text-[12px] font-medium transition-colors ${
-                    selectedLaceType === lace 
-                      ? "border-obsidian-black text-obsidian-black bg-gray-50" 
-                      : "border-[#a89d7e]/30 text-iron-gray hover:border-obsidian-black hover:text-obsidian-black"
-                  }`}
-                >
-                  {lace}
-                </button>
-              ))}
+              {availableLaceTypes.map(lace => {
+                const isSelected = selectedLaceType === lace;
+                return (
+                  <button 
+                    key={lace} 
+                    onClick={() => setSelectedLaceType(lace)}
+                    className={`px-4 py-2 border text-[12px] font-medium transition-all ${
+                      isSelected 
+                        ? "border-obsidian-black ring-1 ring-obsidian-black text-obsidian-black bg-neutral-100 shadow-inner" 
+                        : "border-[#a89d7e]/30 text-iron-gray hover:border-obsidian-black hover:text-obsidian-black bg-white"
+                    }`}
+                  >
+                    {lace}
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
@@ -159,15 +168,15 @@ export default function ProductSelectors({ product }: ProductSelectorsProps) {
       <div className="flex gap-4 mb-4">
         <button 
           onClick={handleAddToCart}
-          disabled={isAdding || isBuying || !currentVariant}
+          disabled={isAdding || isBuying || !currentVariant || currentVariant.stock <= 0}
           className="w-1/2 bg-white border border-obsidian-black text-obsidian-black hover:bg-obsidian-black hover:text-white disabled:opacity-50 py-4 text-[12px] uppercase tracking-[0.2em] font-semibold transition-colors duration-300 shadow-sm"
         >
-          {isAdding ? "Adding..." : "Add To Cart"}
+          {isAdding ? "Adding..." : (currentVariant?.stock && currentVariant.stock > 0 ? "Add To Cart" : "Out of Stock")}
         </button>
 
         <button 
           onClick={handleBuyNow}
-          disabled={isAdding || isBuying || !currentVariant}
+          disabled={isAdding || isBuying || !currentVariant || currentVariant.stock <= 0}
           className="w-1/2 bg-obsidian-black text-pure-white hover:bg-champagne-gold hover:text-obsidian-black disabled:opacity-50 py-4 text-[12px] uppercase tracking-[0.2em] font-semibold transition-colors duration-300 shadow-lg flex justify-center items-center"
         >
           {isBuying ? (

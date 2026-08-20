@@ -15,7 +15,7 @@ export default function CustomWigCTA() {
           <div className="w-[16px] md:w-[24px] border-r border-[#a89d7e]/30 flex-shrink-0 bg-black z-10" />
 
           {/* Main Content */}
-          <div className="flex-grow w-full grid grid-cols-1 md:grid-cols-2">
+          <div className="flex-grow min-w-0 grid grid-cols-1 md:grid-cols-2">
             
             {/* Left Column - Text Content */}
             <div className="flex flex-col border-r-0 md:border-r border-[#a89d7e]/30">

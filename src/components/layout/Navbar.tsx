@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import React, { useState } from "react";
-import { FiMenu, FiShoppingBag, FiSearch } from "react-icons/fi";
+import { FiMenu, FiShoppingBag, FiUser } from "react-icons/fi";
 import { useCart } from "@/context/CartContext";
 import CartDrawer from "../cart/CartDrawer";
 
@@ -42,6 +42,9 @@ export default function Navbar() {
             <div className="flex items-center h-full">
               {/* Desktop Navigation */}
               <div className="hidden md:flex h-full">
+                <Link href="/" className="flex items-center justify-center h-full border-r border-[#a89d7e]/30 px-[24px] text-[10px] tracking-[0.15em] uppercase font-mono text-obsidian-black hover:bg-neutral-50 hover:text-champagne-gold transition-colors">
+                  HOME
+                </Link>
                 <Link href="/shop" className="flex items-center justify-center h-full border-r border-[#a89d7e]/30 px-[24px] text-[10px] tracking-[0.15em] uppercase font-mono text-obsidian-black hover:bg-neutral-50 hover:text-champagne-gold transition-colors">
                   PRODUCTS
                 </Link>
@@ -80,10 +83,10 @@ export default function Navbar() {
 
             {/* Right: Cart and Search inside bordered grid cells */}
             <div className="flex items-center h-full">
-              {/* Search Button (Desktop only) */}
+              {/* Account Button (Desktop only) */}
               <button className="hidden md:flex w-[64px] h-full border-l border-[#a89d7e]/30 items-center justify-center text-obsidian-black hover:bg-neutral-50 transition-colors">
-                <span className="sr-only">Search</span>
-                <FiSearch size={20} />
+                <span className="sr-only">Account</span>
+                <FiUser size={20} />
               </button>
 
               {/* Cart Button (Always visible) */}
@@ -109,6 +112,13 @@ export default function Navbar() {
         {/* Mobile Drawer Menu */}
         {isMobileMenuOpen && (
           <div className="md:hidden w-full border-t border-[#a89d7e]/30 bg-pure-white flex flex-col animate-fadeIn divide-y divide-[#a89d7e]/30 border-b border-[#a89d7e]/30">
+            <Link
+              href="/"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-[11px] tracking-[0.15em] uppercase text-obsidian-black font-mono hover:bg-neutral-50 py-[20px] px-8 transition-colors"
+            >
+              HOME
+            </Link>
             <Link
               href="/shop"
               onClick={() => setIsMobileMenuOpen(false)}

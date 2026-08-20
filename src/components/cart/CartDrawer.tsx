@@ -23,11 +23,10 @@ export default function CartDrawer() {
         setCheckoutError("Failed to initialize checkout. Please try again.");
       }
     } catch (err: unknown) {
-      if (err instanceof Error) {
-        setCheckoutError(err.message || "An error occurred during checkout.");
-      } else {
-        setCheckoutError("An error occurred during checkout.");
+      if (process.env.NODE_ENV === 'development') {
+        console.error("Checkout error:", err);
       }
+      setCheckoutError("An error occurred during checkout. Please try again later.");
     } finally {
       setIsCheckoutLoading(false);
     }
@@ -95,12 +94,16 @@ export default function CartDrawer() {
               <div className="w-16 h-16 bg-[#F8F5ED] rounded-full flex items-center justify-center text-champagne-gold">
                 <FiShoppingBag size={32} />
               </div>
-              <p className="text-iron-gray font-mono uppercase tracking-widest text-[12px]">Your cart is empty</p>
+              <p className="text-iron-gray font-mono uppercase tracking-widest text-[12px] mb-2">Your cart is empty</p>
+              <p className="text-neutral-500 font-sans text-[13px] mb-4">Discover our premium extensions and closures.</p>
               <button 
-                onClick={() => setIsCartOpen(false)}
-                className="px-6 py-3 bg-obsidian-black text-pure-white text-[11px] font-mono uppercase tracking-widest font-bold rounded-full hover:bg-champagne-gold hover:text-obsidian-black transition-colors mt-4"
+                onClick={() => {
+                  setIsCartOpen(false);
+                  window.location.href = '/shop';
+                }}
+                className="px-8 py-4 bg-obsidian-black text-pure-white text-[11px] font-mono uppercase tracking-widest font-bold hover:bg-champagne-gold hover:text-obsidian-black transition-colors mt-2"
               >
-                Continue Shopping
+                Shop Collection
               </button>
             </div>
           ) : (
@@ -153,22 +156,24 @@ export default function CartDrawer() {
                         </p>
                       </div>
 
-                      <div className="flex items-center space-x-3 mt-4 self-start bg-[#F8F5ED] border border-concrete-gray rounded-full px-2 py-1">
+                      <div className="flex items-center space-x-2 mt-4 self-start bg-[#F8F5ED] border border-concrete-gray rounded-full px-2 py-1">
                         <button 
                           onClick={() => updateQuantity(item._id, item.quantity - 1)}
                           disabled={item.quantity <= 1}
-                          className="w-6 h-6 flex items-center justify-center text-iron-gray hover:text-obsidian-black disabled:opacity-50 transition-colors"
+                          className="w-8 h-8 flex items-center justify-center text-iron-gray hover:text-obsidian-black disabled:opacity-50 transition-colors focus:outline-none focus:ring-2 focus:ring-champagne-gold rounded-full"
+                          aria-label="Decrease quantity"
                         >
-                          <FiMinus size={12} />
+                          <FiMinus size={14} />
                         </button>
-                        <span className="text-[11px] font-mono font-bold w-4 text-center select-none">
+                        <span className="text-[12px] font-mono font-bold w-6 text-center select-none">
                           {item.quantity}
                         </span>
                         <button 
                           onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                          className="w-6 h-6 flex items-center justify-center text-iron-gray hover:text-obsidian-black transition-colors"
+                          className="w-8 h-8 flex items-center justify-center text-iron-gray hover:text-obsidian-black transition-colors focus:outline-none focus:ring-2 focus:ring-champagne-gold rounded-full"
+                          aria-label="Increase quantity"
                         >
-                          <FiPlus size={12} />
+                          <FiPlus size={14} />
                         </button>
                       </div>
                     </div>

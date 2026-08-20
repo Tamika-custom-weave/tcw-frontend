@@ -133,7 +133,7 @@ export default function WigBuilder({ options, onClose }: ExtendedWigBuilderProps
   return (
     <div className="flex flex-col lg:flex-row w-full relative h-full">
       {/* Left Column: Interactive Selectors */}
-      <div className="flex-grow w-full lg:w-2/3 border-r border-[#a89d7e]/30 pb-16">
+      <div className="flex-grow min-w-0 lg:w-2/3 border-r border-[#a89d7e]/30 pb-16">
         <LaceSystemSelector 
           options={options.laceSystems} 
           selected={laceSystem} 

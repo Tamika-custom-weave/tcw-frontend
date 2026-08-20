@@ -36,7 +36,7 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
         {/* Left Vertical Line Demarcation */}
         <div className="w-[16px] md:w-[24px] border-r border-[#a89d7e]/30 flex-shrink-0" />
 
-        <div className="flex-grow flex flex-col w-full mx-auto max-w-[1600px]">
+        <div className="flex-grow flex flex-col min-w-0 mx-auto max-w-[1600px]">
           {/* Main Content: Product Grid */}
           <main className="flex-grow">
             {/* Header Section */}

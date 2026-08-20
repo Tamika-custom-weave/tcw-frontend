@@ -71,7 +71,7 @@ export default function Hero() {
         <div className="w-[16px] md:w-[24px] border-r border-[#a89d7e]/30 flex-shrink-0 bg-pure-white z-10" />
 
         {/* Main Slider Container */}
-        <div className="flex-grow w-full relative h-[65vh] md:h-[70vh] lg:h-[calc(100vh-92px)] min-h-[480px] lg:min-h-[650px] overflow-hidden bg-obsidian-black">
+        <div className="flex-grow min-w-0 relative h-[65vh] md:h-[70vh] lg:h-[calc(100vh-92px)] min-h-[480px] lg:min-h-[650px] overflow-hidden bg-obsidian-black">
 
           {/* Top Segment Progress Bars (Hidden on Big Screens - lg:hidden) */}
           <div className="absolute top-4 left-4 right-4 z-30 flex lg:hidden gap-2 max-w-md mx-auto md:max-w-xl">

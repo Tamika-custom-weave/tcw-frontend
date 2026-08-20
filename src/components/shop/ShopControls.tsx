@@ -26,8 +26,8 @@ export default function ShopControls({ categories, totalProducts }: ShopControls
   };
 
   return (
-    <div className="flex flex-col gap-3 mt-4 relative z-20">
-      <div className="flex relative">
+    <div className="flex flex-col gap-3 mt-4 relative z-20 items-start">
+      <div className="inline-flex relative w-max">
         <button
           onClick={() => setIsFilterOpen(!isFilterOpen)}
           className="flex items-center gap-2 text-obsidian-black hover:text-champagne-gold text-[12px] sm:text-[13px] font-mono font-bold uppercase tracking-widest transition-colors"
@@ -43,17 +43,17 @@ export default function ShopControls({ categories, totalProducts }: ShopControls
             <line x1="9" y1="8" x2="15" y2="8"></line>
             <line x1="17" y1="16" x2="23" y2="16"></line>
           </svg>
-          {currentCategory ? "Categories *" : "Filter"}
+          {currentCategory ? categories.find(c => c.slug === currentCategory)?.name || "Filter" : "Filter"}
         </button>
 
         {/* Dropdown Menu for Categories */}
         {isFilterOpen && (
-          <div className="absolute top-full left-0 w-full mt-1 bg-white border border-[#a89d7e]/30 shadow-lg flex flex-col z-50">
+          <div className="absolute top-full left-0 min-w-[160px] whitespace-nowrap mt-2 bg-white border border-[#a89d7e]/30 shadow-lg flex flex-col z-50">
             <button
               onClick={() => handleCategorySelect(null)}
               className={`text-left px-4 py-3 text-[11px] font-mono font-bold uppercase tracking-widest transition-colors ${!currentCategory ? 'bg-[#F9F7F4] text-champagne-gold' : 'text-obsidian-black hover:bg-gray-50'}`}
             >
-             all Products
+             All Products
             </button>
             {categories.filter(c => c.isActive).map((cat) => (
               <button

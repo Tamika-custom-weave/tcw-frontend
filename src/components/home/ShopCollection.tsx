@@ -63,8 +63,10 @@ export default function ShopCollection() {
         throw new Error(json.message || "Invalid categories data format");
       }
     } catch (err: unknown) {
-      const errorMsg = err instanceof Error ? err.message : "Unable to load categories";
-      setError(errorMsg);
+      if (process.env.NODE_ENV === 'development') {
+        console.error("Categories fetch error:", err);
+      }
+      setError("Unable to load categories. Please try again later.");
     } finally {
       setLoading(false);
     }
@@ -94,8 +96,10 @@ export default function ShopCollection() {
         }
       } catch (err: unknown) {
         if (isMounted) {
-          const errorMsg = err instanceof Error ? err.message : "Unable to load categories";
-          setError(errorMsg);
+          if (process.env.NODE_ENV === 'development') {
+            console.error("Categories fetch error:", err);
+          }
+          setError("Unable to load categories. Please try again later.");
         }
       } finally {
         if (isMounted) {
@@ -118,7 +122,7 @@ export default function ShopCollection() {
         <div className="w-[16px] md:w-[24px] border-r border-[#a89d7e]/30 flex-shrink-0" />
 
         {/* Main Content Container */}
-        <div className="flex-grow w-full border-b border-[#a89d7e]/30">
+        <div className="flex-grow min-w-0 border-b border-[#a89d7e]/30">
           
           {/* Header Grid Section */}
           <div className="w-full grid grid-cols-1 md:grid-cols-2 border-b border-[#a89d7e]/30">

@@ -35,7 +35,7 @@ export default async function FeaturedProducts() {
         <div className="w-[16px] md:w-[24px] border-r border-[#a89d7e]/30 flex-shrink-0" />
 
         {/* Main Content */}
-        <div className="flex-grow w-full">
+        <div className="flex-grow min-w-0">
           <div className="px-8 sm:px-12 md:px-16 lg:px-24 py-8 border-b border-[#a89d7e]/30 flex items-center gap-3">
             <span className="inline-block w-1.5 h-1.5 bg-obsidian-black"></span>
             <h2 className="text-obsidian-black font-mono font-bold text-[11px] md:text-[13px] uppercase tracking-[0.15em] leading-none mt-0.5">

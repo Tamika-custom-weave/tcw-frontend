@@ -67,7 +67,7 @@ export const fetchCategories = async (): Promise<Category[]> => {
     return json.success ? (json.data as Category[]) : [];
   } catch (error) {
     if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
-    console.error("Error fetching categories:", error);
+    if (process.env.NODE_ENV === 'development') console.error("Error fetching categories:", error);
     return [];
   }
 };
@@ -82,7 +82,7 @@ export const fetchProducts = async (): Promise<Product[]> => {
     return json.success ? (json.data as Product[]) : [];
   } catch (error) {
     if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
-    console.error("Error fetching products:", error);
+    if (process.env.NODE_ENV === 'development') console.error("Error fetching products:", error);
     return [];
   }
 };
@@ -97,7 +97,7 @@ export const fetchProductsByCategory = async (categoryId: string): Promise<Produ
     return json.success ? (json.data as Product[]) : [];
   } catch (error) {
     if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
-    console.error("Error fetching products by category:", error);
+    if (process.env.NODE_ENV === 'development') console.error("Error fetching products by category:", error);
     return [];
   }
 };
@@ -112,7 +112,7 @@ export const fetchProductBySlug = async (slug: string): Promise<Product | null> 
     return json.success ? (json.data as Product) : null;
   } catch (error) {
     if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
-    console.error("Error fetching product by slug:", error);
+    if (process.env.NODE_ENV === 'development') console.error("Error fetching product by slug:", error);
     return null;
   }
 };
@@ -148,7 +148,7 @@ export const fetchCustomWigOptions = async (): Promise<CustomWigOptionsResponse 
     return json.success ? (json.data as CustomWigOptionsResponse) : null;
   } catch (error) {
     if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
-    console.error("Error fetching custom wig options:", error);
+    if (process.env.NODE_ENV === 'development') console.error("Error fetching custom wig options:", error);
     return null;
   }
 };
@@ -165,7 +165,7 @@ export const calculateCustomWigPrice = async (payload: PriceCalculationPayload):
     return json.success ? json.data.totalPrice : null;
   } catch (error) {
     if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
-    console.error("Error calculating custom wig price:", error);
+    if (process.env.NODE_ENV === 'development') console.error("Error calculating custom wig price:", error);
     return null;
   }
 };
@@ -182,7 +182,7 @@ export const createCustomWig = async (payload: CreateCustomWigPayload): Promise<
     return json.success ? json.data._id : null;
   } catch (error) {
     if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
-    console.error("Error creating custom wig:", error);
+    if (process.env.NODE_ENV === 'development') console.error("Error creating custom wig:", error);
     return null;
   }
 };
@@ -242,14 +242,14 @@ export const fetchCart = async (): Promise<Cart | null> => {
     }
     if (!res.ok) {
         const errorText = await res.text();
-        console.error(`Failed to fetch cart: ${res.status} ${res.statusText} - ${errorText}`);
+        if (process.env.NODE_ENV === 'development') console.error(`Failed to fetch cart: ${res.status} ${res.statusText} - ${errorText}`);
         throw new Error("Failed to fetch cart");
       }
     const json = await res.json();
     return json.success ? (json.data as Cart) : null;
   } catch (error) {
     if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
-    console.error("Error fetching cart:", error);
+    if (process.env.NODE_ENV === 'development') console.error("Error fetching cart:", error);
     return null;
   }
 };
@@ -267,7 +267,7 @@ export const addToCart = async (payload: AddToCartPayload): Promise<Cart | null>
     return json.success ? (json.data as Cart) : null;
   } catch (error) {
     if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
-    console.error("Error adding to cart:", error);
+    if (process.env.NODE_ENV === 'development') console.error("Error adding to cart:", error);
     return null;
   }
 };
@@ -285,7 +285,7 @@ export const updateCartItem = async (itemId: string, quantity: number): Promise<
     return json.success ? (json.data as Cart) : null;
   } catch (error) {
     if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
-    console.error("Error updating cart item:", error);
+    if (process.env.NODE_ENV === 'development') console.error("Error updating cart item:", error);
     return null;
   }
 };
@@ -301,7 +301,7 @@ export const removeCartItem = async (itemId: string): Promise<Cart | null> => {
     return json.success ? (json.data as Cart) : null;
   } catch (error) {
     if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
-    console.error("Error removing cart item:", error);
+    if (process.env.NODE_ENV === 'development') console.error("Error removing cart item:", error);
     return null;
   }
 };
@@ -317,7 +317,7 @@ export const clearCart = async (): Promise<Cart | null> => {
     return json.success ? (json.data as Cart) : null;
   } catch (error) {
     if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
-    console.error("Error clearing cart:", error);
+    if (process.env.NODE_ENV === 'development') console.error("Error clearing cart:", error);
     return null;
   }
 };
@@ -338,7 +338,7 @@ export const createCheckoutSession = async (cartId: string): Promise<string | nu
     return json.success ? json.url : null;
   } catch (error) {
     if ((error as Error & { digest?: string })?.digest === 'DYNAMIC_SERVER_USAGE') throw error;
-    console.error("Error creating checkout session:", error);
+    if (process.env.NODE_ENV === 'development') console.error("Error creating checkout session:", error);
     throw error;
   }
 };

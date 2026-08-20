@@ -8,7 +8,7 @@ export default function Footer() {
         {/* Left Vertical Line Demarcation */}
         <div className="w-[16px] md:w-[24px] border-r border-[#a89d7e]/30 flex-shrink-0 bg-black z-10" />
 
-        <div className="flex-grow w-full">
+        <div className="flex-grow min-w-0">
           {/* Top Row Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 border-b border-[#a89d7e]/30">
             
