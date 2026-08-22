@@ -10,20 +10,32 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: "http://13.38.23.165:5000/api/:path*",
-      },
-    ];
-  },
+
 
   async headers() {
+    const isDev = process.env.NODE_ENV !== "production";
+    
+    // Conditionally add unsafe-eval and local endpoints for Next.js HMR and local API
+    const cspHeader = `
+      default-src 'self';
+      script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""};
+      style-src 'self' 'unsafe-inline';
+      connect-src 'self' https://api.tamikascustomweaves.com${isDev ? " http://localhost:5000 ws://localhost:3000 wss://localhost:3000" : ""};
+      img-src 'self' data: blob: https://res.cloudinary.com;
+      font-src 'self';
+      frame-src 'none';
+      frame-ancestors 'none';
+      upgrade-insecure-requests;
+    `.replace(/\s{2,}/g, ' ').trim();
+
     return [
       {
         source: "/(.*)",
         headers: [
+          {
+            key: "Content-Security-Policy",
+            value: cspHeader,
+          },
           {
             key: "X-Content-Type-Options",
             value: "nosniff",
