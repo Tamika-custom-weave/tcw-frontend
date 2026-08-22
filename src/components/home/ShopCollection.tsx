@@ -45,7 +45,14 @@ export default function ShopCollection() {
     setLoading(true);
     setError(null);
     try {
-      const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+      let baseUrl = process.env.NEXT_PUBLIC_API_URL;
+      if (!baseUrl) {
+        if (process.env.NODE_ENV === 'development') {
+          baseUrl = "http://localhost:5000/api";
+        } else {
+          throw new Error("NEXT_PUBLIC_API_URL is not configured");
+        }
+      }
       const res = await fetch(`${baseUrl}/categories`);
 
       if (!res.ok) {
@@ -77,7 +84,14 @@ export default function ShopCollection() {
     
     const initialFetch = async () => {
       try {
-        const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+        let baseUrl = process.env.NEXT_PUBLIC_API_URL;
+        if (!baseUrl) {
+          if (process.env.NODE_ENV === 'development') {
+            baseUrl = "http://localhost:5000/api";
+          } else {
+            throw new Error("NEXT_PUBLIC_API_URL is not configured");
+          }
+        }
         const res = await fetch(`${baseUrl}/categories`);
 
         if (!res.ok) throw new Error(`Failed to fetch categories (${res.status})`);

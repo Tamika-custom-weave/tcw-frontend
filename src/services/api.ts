@@ -49,12 +49,19 @@ export interface Product {
 }
 
 const getBaseUrl = () => {
+  const isDev = process.env.NODE_ENV === "development";
+  
   if (typeof window === "undefined") {
     // Server-side
-    return process.env.INTERNAL_API_URL || "http://localhost:5000/api";
+    const url = process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL;
+    if (!url && !isDev) throw new Error("API URL is not configured");
+    return url || "http://localhost:5000/api";
   }
+  
   // Client-side
-  return process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+  const url = process.env.NEXT_PUBLIC_API_URL;
+  if (!url && !isDev) throw new Error("NEXT_PUBLIC_API_URL is not configured");
+  return url || "http://localhost:5000/api";
 };
 
 export const fetchCategories = async (): Promise<Category[]> => {
