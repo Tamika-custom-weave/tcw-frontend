@@ -10,10 +10,10 @@ export default function CheckoutSuccessPage() {
         Order Successful
       </h1>
       <p className="text-[14px] font-sans text-iron-gray max-w-md mb-2">
-        Thank you for your purchase! We've received your order and are getting it ready.
+        Thank you for your purchase! We&apos;ve received your order and are getting it ready.
       </p>
       <p className="text-[14px] font-sans text-iron-gray max-w-md mb-8">
-        Your payment was processed successfully. You'll receive a confirmation email shortly.
+        Your payment was processed successfully. You&apos;ll receive a confirmation email shortly.
       </p>
       <Link
         href="/"

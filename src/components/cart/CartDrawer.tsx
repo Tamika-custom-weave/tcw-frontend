@@ -3,10 +3,12 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { FiX, FiTrash2, FiMinus, FiPlus, FiShoppingBag } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { createCheckoutSession } from "@/services/api";
 
 export default function CartDrawer() {
+  const router = useRouter();
   const { cart, isLoading, isCartOpen, setIsCartOpen, updateQuantity, removeItem, clearCart } = useCart();
   const [checkoutLoadingId, setCheckoutLoadingId] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
@@ -99,7 +101,7 @@ export default function CartDrawer() {
               <button 
                 onClick={() => {
                   setIsCartOpen(false);
-                  window.location.href = '/shop';
+                  router.push('/shop');
                 }}
                 className="px-8 py-4 bg-obsidian-black text-pure-white text-[11px] font-mono uppercase tracking-widest font-bold hover:bg-champagne-gold hover:text-obsidian-black transition-colors mt-2"
               >
