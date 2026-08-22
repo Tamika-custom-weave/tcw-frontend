@@ -55,7 +55,10 @@ export default function Navbar() {
               <div className="flex md:hidden items-center h-full border-r border-[#a89d7e]/30">
                 <button
                   onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                  className="w-[48px] h-full flex items-center justify-center text-obsidian-black hover:bg-neutral-50 transition-colors focus:outline-none"
+                  className="w-[48px] h-full flex items-center justify-center text-obsidian-black hover:bg-neutral-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-champagne-gold"
+                  aria-label="Toggle mobile menu"
+                  aria-expanded={isMobileMenuOpen}
+                  aria-controls="mobile-menu"
                 >
                   <FiMenu size={20} />
                 </button>
@@ -91,7 +94,7 @@ export default function Navbar() {
               {/* Cart Button (Always visible) */}
               <button 
                 onClick={() => setIsCartOpen(true)}
-                className="w-[48px] md:w-[64px] h-full border-l border-[#a89d7e]/30 flex items-center justify-center text-obsidian-black hover:bg-neutral-50 transition-colors relative"
+                className="w-[48px] md:w-[64px] h-full border-l border-[#a89d7e]/30 flex items-center justify-center text-obsidian-black hover:bg-neutral-50 transition-colors relative focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-champagne-gold"
               >
                 <span className="sr-only">Cart</span>
                 <FiShoppingBag size={20} />
@@ -110,7 +113,7 @@ export default function Navbar() {
 
         {/* Mobile Drawer Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden w-full border-t border-[#a89d7e]/30 bg-pure-white flex flex-col animate-fadeIn divide-y divide-[#a89d7e]/30 border-b border-[#a89d7e]/30">
+          <div id="mobile-menu" className="md:hidden w-full border-t border-[#a89d7e]/30 bg-pure-white flex flex-col animate-fadeIn divide-y divide-[#a89d7e]/30 border-b border-[#a89d7e]/30">
             <Link
               href="/"
               onClick={() => setIsMobileMenuOpen(false)}

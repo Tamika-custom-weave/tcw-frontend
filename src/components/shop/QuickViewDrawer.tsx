@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Product, addToCart as apiAddToCart, createCheckoutSession } from "@/services/api";
 import { useCart } from "@/context/CartContext";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 interface QuickViewDrawerProps {
   product: Product;
@@ -23,6 +24,8 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
   const { addToCart } = useCart();
+  
+  const modalRef = useFocusTrap(isOpen);
 
   useEffect(() => {
     if (isOpen) {
@@ -122,14 +125,21 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-md h-full bg-white flex flex-col shadow-2xl animate-slideInRight">
+      <div 
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="quickview-drawer-title"
+        className="relative w-full max-w-md h-full bg-white flex flex-col shadow-2xl animate-slideInRight"
+      >
         <div className="flex justify-between items-center p-6 border-b border-[#a89d7e]/30">
-          <h2 className="text-obsidian-black font-mono font-bold text-[13px] uppercase tracking-widest">
+          <h2 id="quickview-drawer-title" className="text-obsidian-black font-mono font-bold text-[13px] uppercase tracking-widest">
             SELECT OPTIONS
           </h2>
           <button 
             onClick={onClose}
-            className="text-obsidian-black hover:text-champagne-gold transition-colors"
+            className="text-obsidian-black hover:text-champagne-gold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne-gold rounded-sm"
+            aria-label="Close modal"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -276,10 +286,10 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
           </div>
 
           <div className="flex gap-4 mb-4 mt-auto">
-            <div className="flex items-center border border-gray-300 w-24">
-              <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-3 py-2 text-gray-500 hover:text-black transition-colors">-</button>
+            <div className="flex items-center border border-gray-300 w-24 rounded-sm focus-within:ring-2 focus-within:ring-champagne-gold focus-within:outline-none">
+              <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="px-3 py-2 text-gray-500 hover:text-black transition-colors focus:outline-none" aria-label="Decrease quantity">-</button>
               <span className="flex-1 text-center font-mono text-[13px]">{quantity}</span>
-              <button onClick={() => setQuantity(quantity + 1)} className="px-3 py-2 text-gray-500 hover:text-black transition-colors">+</button>
+              <button onClick={() => setQuantity(quantity + 1)} className="px-3 py-2 text-gray-500 hover:text-black transition-colors focus:outline-none" aria-label="Increase quantity">+</button>
             </div>
             <button 
               onClick={handleAddToCart}

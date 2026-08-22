@@ -6,12 +6,15 @@ import { FiX, FiTrash2, FiMinus, FiPlus, FiShoppingBag } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { createCheckoutSession } from "@/services/api";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 export default function CartDrawer() {
   const router = useRouter();
   const { cart, isLoading, isCartOpen, setIsCartOpen, updateQuantity, removeItem, clearCart } = useCart();
   const [checkoutLoadingId, setCheckoutLoadingId] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
+  
+  const modalRef = useFocusTrap(isCartOpen);
 
   const handleCheckout = async (cartItemId?: string) => {
     if (!cart) return;
@@ -69,17 +72,22 @@ export default function CartDrawer() {
       onClick={handleBackdropClick}
     >
       <div 
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="cart-drawer-title"
         className="absolute top-0 right-0 h-[100dvh] w-full max-w-md bg-pure-white shadow-2xl flex flex-col transform transition-transform duration-300 ease-in-out translate-x-0"
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-[#a89d7e]/30">
-          <h2 className="text-[16px] font-mono font-bold tracking-widest uppercase text-obsidian-black flex items-center">
+          <h2 id="cart-drawer-title" className="text-[16px] font-mono font-bold tracking-widest uppercase text-obsidian-black flex items-center">
             <FiShoppingBag className="mr-3" />
             Your Cart
           </h2>
           <button 
             onClick={() => setIsCartOpen(false)}
-            className="p-2 text-iron-gray hover:text-obsidian-black transition-colors"
+            className="p-2 text-iron-gray hover:text-obsidian-black transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne-gold rounded-sm"
+            aria-label="Close cart"
           >
             <FiX size={24} />
           </button>
@@ -162,7 +170,7 @@ export default function CartDrawer() {
                         <button 
                           onClick={() => updateQuantity(item._id, item.quantity - 1)}
                           disabled={item.quantity <= 1}
-                          className="w-10 h-10 flex items-center justify-center text-iron-gray hover:text-obsidian-black disabled:opacity-50 transition-colors focus:outline-none focus:ring-2 focus:ring-champagne-gold rounded-full"
+                          className="w-10 h-10 flex items-center justify-center text-iron-gray hover:text-obsidian-black disabled:opacity-50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne-gold rounded-full"
                           aria-label="Decrease quantity"
                         >
                           <FiMinus size={16} />
@@ -172,7 +180,7 @@ export default function CartDrawer() {
                         </span>
                         <button 
                           onClick={() => updateQuantity(item._id, item.quantity + 1)}
-                          className="w-10 h-10 flex items-center justify-center text-iron-gray hover:text-obsidian-black transition-colors focus:outline-none focus:ring-2 focus:ring-champagne-gold rounded-full"
+                          className="w-10 h-10 flex items-center justify-center text-iron-gray hover:text-obsidian-black transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne-gold rounded-full"
                           aria-label="Increase quantity"
                         >
                           <FiPlus size={16} />

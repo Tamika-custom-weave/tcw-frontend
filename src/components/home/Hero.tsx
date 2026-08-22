@@ -80,7 +80,7 @@ export default function Hero() {
                 key={slide.id}
                 onClick={() => setCurrentIndex(idx)}
                 aria-label={`Go to slide ${idx + 1}`}
-                className="flex-1 h-[2px] bg-white/30 overflow-hidden transition-all focus:outline-none cursor-pointer"
+                className="flex-1 h-[2px] bg-white/30 overflow-hidden transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne-gold cursor-pointer"
               >
                 <div
                   className={`h-full bg-pure-white transition-all duration-300 ${idx === currentIndex
@@ -159,14 +159,14 @@ export default function Hero() {
             <button
               onClick={prevSlide}
               aria-label="Previous Slide"
-              className="w-[64px] h-[64px] flex items-center justify-center border-r border-white/20 text-white hover:bg-white hover:text-black transition-colors focus:outline-none"
+              className="w-[64px] h-[64px] flex items-center justify-center border-r border-white/20 text-white hover:bg-white hover:text-black transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-champagne-gold"
             >
               <FiChevronLeft size={24} />
             </button>
             <button
               onClick={nextSlide}
               aria-label="Next Slide"
-              className="w-[64px] h-[64px] flex items-center justify-center text-white hover:bg-white hover:text-black transition-colors focus:outline-none"
+              className="w-[64px] h-[64px] flex items-center justify-center text-white hover:bg-white hover:text-black transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-champagne-gold"
             >
               <FiChevronRight size={24} />
             </button>

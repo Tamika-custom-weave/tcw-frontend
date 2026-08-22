@@ -41,7 +41,7 @@ export default function ProductGallery({ productName, images, thumbnail }: Produ
             <button
               key={img.publicId || idx}
               onClick={() => setMainImage(img.url)}
-              className={`relative w-24 sm:w-32 aspect-square flex-shrink-0 border-r border-[#a89d7e]/30 snap-start cursor-pointer transition-all focus:outline-none ${
+              className={`relative w-24 sm:w-32 aspect-square flex-shrink-0 border-r border-[#a89d7e]/30 snap-start cursor-pointer transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-champagne-gold ${
                 mainImage === img.url ? "opacity-100 ring-2 ring-inset ring-champagne-gold" : "opacity-60 hover:opacity-100"
               }`}
             >

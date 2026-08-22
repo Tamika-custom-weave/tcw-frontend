@@ -98,10 +98,10 @@ export default function ProductSelectors({ product }: ProductSelectorsProps) {
                   <button 
                     key={len} 
                     onClick={() => setSelectedLength(len)}
-                    className={`px-4 py-2 border text-[12px] font-medium transition-all ${
+                    className={`px-4 py-2 border text-[12px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-champagne-gold ${
                       isSelected 
-                        ? "border-obsidian-black ring-1 ring-obsidian-black text-obsidian-black bg-neutral-100 shadow-inner" 
-                        : "border-[#a89d7e]/30 text-iron-gray hover:border-obsidian-black hover:text-obsidian-black bg-white"
+                        ? "border-obsidian-black bg-obsidian-black text-white font-bold shadow-md" 
+                        : "border-[#a89d7e]/30 text-iron-gray hover:border-obsidian-black hover:text-obsidian-black bg-white font-medium"
                     }`}
                   >
                     {len}
@@ -124,10 +124,10 @@ export default function ProductSelectors({ product }: ProductSelectorsProps) {
                   <button 
                     key={tex} 
                     onClick={() => setSelectedTexture(tex)}
-                    className={`px-4 py-2 border text-[12px] font-medium transition-all ${
+                    className={`px-4 py-2 border text-[12px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-champagne-gold ${
                       isSelected 
-                        ? "border-obsidian-black ring-1 ring-obsidian-black text-obsidian-black bg-neutral-100 shadow-inner" 
-                        : "border-[#a89d7e]/30 text-iron-gray hover:border-obsidian-black hover:text-obsidian-black bg-white"
+                        ? "border-obsidian-black bg-obsidian-black text-white font-bold shadow-md" 
+                        : "border-[#a89d7e]/30 text-iron-gray hover:border-obsidian-black hover:text-obsidian-black bg-white font-medium"
                     }`}
                   >
                     {tex}
@@ -150,10 +150,10 @@ export default function ProductSelectors({ product }: ProductSelectorsProps) {
                   <button 
                     key={lace} 
                     onClick={() => setSelectedLaceType(lace)}
-                    className={`px-4 py-2 border text-[12px] font-medium transition-all ${
+                    className={`px-4 py-2 border text-[12px] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-champagne-gold ${
                       isSelected 
-                        ? "border-obsidian-black ring-1 ring-obsidian-black text-obsidian-black bg-neutral-100 shadow-inner" 
-                        : "border-[#a89d7e]/30 text-iron-gray hover:border-obsidian-black hover:text-obsidian-black bg-white"
+                        ? "border-obsidian-black bg-obsidian-black text-white font-bold shadow-md" 
+                        : "border-[#a89d7e]/30 text-iron-gray hover:border-obsidian-black hover:text-obsidian-black bg-white font-medium"
                     }`}
                   >
                     {lace}

@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { Product } from "@/services/api";
 import { useCart } from "@/context/CartContext";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 interface QuickViewModalProps {
   product: Product;
@@ -20,6 +21,8 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
   const [isAdding, setIsAdding] = useState(false);
 
   const { addToCart } = useCart();
+  
+  const modalRef = useFocusTrap(isOpen);
 
   useEffect(() => {
     if (isOpen) {
@@ -86,11 +89,18 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
       />
 
       {/* Modal Container */}
-      <div className="relative w-full max-w-6xl max-h-full bg-white flex flex-col md:flex-row overflow-hidden shadow-2xl animate-fadeIn">
+      <div 
+        ref={modalRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="quickview-modal-title"
+        className="relative w-full max-w-6xl max-h-full bg-white flex flex-col md:flex-row overflow-hidden shadow-2xl animate-fadeIn"
+      >
         {/* Close Button */}
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 z-10 p-2 text-obsidian-black hover:text-champagne-gold transition-colors"
+          className="absolute top-4 right-4 z-10 p-2 text-obsidian-black hover:text-champagne-gold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne-gold rounded-sm"
+          aria-label="Close modal"
         >
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -121,7 +131,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
           </div>
 
           <div className="prose prose-sm prose-gray max-w-none mb-8">
-            <h2 className="text-obsidian-black font-mono font-bold text-[14px] uppercase tracking-wider mb-4 border-b border-[#a89d7e]/30 pb-4">
+            <h2 id="quickview-modal-title" className="text-obsidian-black font-mono font-bold text-[14px] uppercase tracking-wider mb-4 border-b border-[#a89d7e]/30 pb-4">
               {product.name}
             </h2>
             

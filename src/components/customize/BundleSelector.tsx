@@ -132,7 +132,8 @@ export default function BundleSelector({ options, selected, onChange }: BundleSe
                   <div className="flex items-center space-x-2 bg-pure-white border border-concrete-gray rounded-full px-2 py-1">
                     <button 
                       onClick={() => handleUpdateQuantity(bundle.product, bundle.variantSku, bundle.quantity - 1)}
-                      className="w-5 h-5 flex items-center justify-center text-iron-gray hover:text-obsidian-black focus:outline-none"
+                      className="w-5 h-5 flex items-center justify-center text-iron-gray hover:text-obsidian-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne-gold rounded-sm"
+                      aria-label="Decrease quantity"
                     >
                       <span className="text-[14px] leading-none">-</span>
                     </button>
@@ -141,7 +142,8 @@ export default function BundleSelector({ options, selected, onChange }: BundleSe
                     </span>
                     <button 
                       onClick={() => handleUpdateQuantity(bundle.product, bundle.variantSku, bundle.quantity + 1)}
-                      className="w-5 h-5 flex items-center justify-center text-iron-gray hover:text-obsidian-black focus:outline-none"
+                      className="w-5 h-5 flex items-center justify-center text-iron-gray hover:text-obsidian-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-champagne-gold rounded-sm"
+                      aria-label="Increase quantity"
                     >
                       <span className="text-[12px] leading-none">+</span>
                     </button>

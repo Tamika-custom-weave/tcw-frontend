@@ -55,7 +55,7 @@ export default function SearchableCombobox({
       >
         <input
           type="text"
-          className="w-full bg-transparent px-4 py-3 text-[12px] font-mono focus:outline-none disabled:cursor-not-allowed"
+          className="w-full bg-transparent px-4 py-3 text-[12px] font-mono focus-visible:outline-none disabled:cursor-not-allowed"
           placeholder={placeholder}
           value={searchTerm}
           onChange={(e) => {
