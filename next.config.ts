@@ -22,10 +22,10 @@ const nextConfig: NextConfig = {
     // Conditionally add unsafe-eval and local endpoints for Next.js HMR and local API
     const cspHeader = `
       default-src 'self';
-      script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""};
+      script-src 'self' 'unsafe-inline' https://www.googletagmanager.com${isDev ? " 'unsafe-eval'" : ""};
       style-src 'self' 'unsafe-inline';
-      connect-src 'self' https://api.tamikascustomweaves.com${isDev ? " http://localhost:5000 ws://localhost:3000 wss://localhost:3000" : ""};
-      img-src 'self' data: blob: https://res.cloudinary.com https://picsum.photos;
+      connect-src 'self' https://api.tamikascustomweaves.com https://www.google-analytics.com https://analytics.google.com https://*.google-analytics.com${isDev ? " http://localhost:5000 ws://localhost:3000 wss://localhost:3000" : ""};
+      img-src 'self' data: blob: https://res.cloudinary.com https://picsum.photos https://www.googletagmanager.com https://www.google-analytics.com;
       font-src 'self';
       frame-src 'none';
       frame-ancestors 'none';

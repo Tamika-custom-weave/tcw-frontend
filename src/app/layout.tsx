@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { CartProvider } from "@/context/CartContext";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const noto = Noto_Sans_JP({
   variable: "--font-noto",
@@ -74,6 +75,9 @@ export default function RootLayout({
           <main className="flex-grow">{children}</main>
           <Footer />
         </CartProvider>
+        {process.env.NODE_ENV === "production" && (
+          <GoogleAnalytics gaId="G-M7RKREQ8BY" />
+        )}
       </body>
     </html>
   );

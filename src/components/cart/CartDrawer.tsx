@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
 import { createCheckoutSession } from "@/services/api";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { sendGAEvent } from "@next/third-parties/google";
 
 export default function CartDrawer() {
   const router = useRouter();
@@ -23,6 +24,46 @@ export default function CartDrawer() {
     try {
       const url = await createCheckoutSession(cart.cartId, cartItemId);
       if (url) {
+        const itemsToCheckout = cartItemId ? cart.items.filter(i => i._id === cartItemId) : cart.items;
+        
+        const gaItems = itemsToCheckout.map(item => {
+          let itemName = "";
+          let itemCategory = "";
+          let price = 0;
+          let itemId = item._id;
+
+          if (item.itemType === "PRODUCT" && item.product) {
+            itemName = item.product.name;
+            itemCategory = item.product.category?.name || "Product";
+            const variant = item.product.variants.find(v => v.sku === item.variantSku);
+            // @ts-expect-error - price field from populated cart item
+            price = item.price || (variant?.price ?? 0);
+            itemId = item.variantSku || item.product._id;
+          } else if (item.itemType === "CUSTOM_WIG" && item.customWig) {
+            itemName = "Custom Built Wig";
+            itemCategory = "Custom Wig";
+            // @ts-expect-error - price field from populated cart item
+            price = item.price || item.customWig.totalPrice;
+            itemId = item.customWig._id;
+          }
+
+          return {
+            item_id: itemId,
+            item_name: itemName,
+            item_category: itemCategory,
+            price: price,
+            quantity: item.quantity,
+          };
+        });
+
+        const totalValue = gaItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+
+        sendGAEvent("event", "begin_checkout", {
+          currency: "USD",
+          value: totalValue,
+          items: gaItems,
+        });
+
         window.location.href = url;
       } else {
         setCheckoutError("Failed to initialize checkout. Please try again.");

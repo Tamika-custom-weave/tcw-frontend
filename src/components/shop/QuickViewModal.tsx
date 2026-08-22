@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Product } from "@/services/api";
 import { useCart } from "@/context/CartContext";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { sendGAEvent } from "@next/third-parties/google";
 
 interface QuickViewModalProps {
   product: Product;
@@ -76,6 +77,19 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
     });
     setIsAdding(false);
     if (added) {
+      sendGAEvent("event", "add_to_cart", {
+        currency: "USD",
+        value: price,
+        items: [
+          {
+            item_id: currentVariant.sku,
+            item_name: product.name,
+            item_category: product.category?.name || "Uncategorized",
+            price: price,
+            quantity: 1,
+          },
+        ],
+      });
       onClose();
     }
   };

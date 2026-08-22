@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Product, addToCart as apiAddToCart, createCheckoutSession } from "@/services/api";
 import { useCart } from "@/context/CartContext";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { sendGAEvent } from "@next/third-parties/google";
 
 interface QuickViewDrawerProps {
   product: Product;
@@ -80,6 +81,19 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
     });
     setIsAdding(false);
     if (added) {
+      sendGAEvent("event", "add_to_cart", {
+        currency: "USD",
+        value: price * quantity,
+        items: [
+          {
+            item_id: currentVariant.sku,
+            item_name: product.name,
+            item_category: product.category?.name || "Uncategorized",
+            price: price,
+            quantity: quantity,
+          },
+        ],
+      });
       onClose();
     }
   };
@@ -97,8 +111,60 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
       });
       
       if (updatedCart && updatedCart.cartId) {
+        sendGAEvent("event", "add_to_cart", {
+          currency: "USD",
+          value: price * quantity,
+          items: [
+            {
+              item_id: currentVariant.sku,
+              item_name: product.name,
+              item_category: product.category?.name || "Uncategorized",
+              price: price,
+              quantity: quantity,
+            },
+          ],
+        });
+        
         const url = await createCheckoutSession(updatedCart.cartId);
         if (url) {
+          const gaItems = updatedCart.items.map(item => {
+            let itemName = "";
+            let itemCategory = "";
+            let itemPrice = 0;
+            let itemId = item._id;
+
+            if (item.itemType === "PRODUCT" && item.product) {
+              itemName = item.product.name;
+              itemCategory = item.product.category?.name || "Product";
+              const variant = item.product.variants?.find(v => v.sku === item.variantSku);
+              // @ts-expect-error - price field from populated cart item
+              itemPrice = item.price || (variant?.price ?? 0);
+              itemId = item.variantSku || item.product._id;
+            } else if (item.itemType === "CUSTOM_WIG" && item.customWig) {
+              itemName = "Custom Built Wig";
+              itemCategory = "Custom Wig";
+              // @ts-expect-error - price field from populated cart item
+              itemPrice = item.price || item.customWig.totalPrice;
+              itemId = item.customWig._id;
+            }
+
+            return {
+              item_id: itemId,
+              item_name: itemName,
+              item_category: itemCategory,
+              price: itemPrice,
+              quantity: item.quantity,
+            };
+          });
+
+          const totalValue = gaItems.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+
+          sendGAEvent("event", "begin_checkout", {
+            currency: "USD",
+            value: totalValue,
+            items: gaItems,
+          });
+
           window.location.href = url;
         } else {
           setCheckoutError("Failed to initialize checkout.");

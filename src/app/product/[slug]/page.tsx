@@ -5,6 +5,7 @@ import { Metadata, ResolvingMetadata } from "next";
 import { fetchProductBySlug } from "@/services/api";
 import ProductGallery from "@/components/shop/ProductGallery";
 import ProductSelectors from "@/components/shop/ProductSelectors";
+import ProductViewTracker from "@/components/analytics/ProductViewTracker";
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -129,6 +130,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
           )}
         </div>
       </div>
+      
+      {/* Invisible analytics tracker */}
+      <ProductViewTracker product={product} />
     </div>
   );
 }

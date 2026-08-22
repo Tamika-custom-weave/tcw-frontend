@@ -332,11 +332,22 @@ export const clearCart = async (): Promise<Cart | null> => {
 
 export const createCheckoutSession = async (cartId: string, cartItemId?: string): Promise<string | null> => {
   try {
+    let clientId = undefined;
+    if (typeof document !== 'undefined') {
+      const match = document.cookie.match(/(?:^|;)\s*_ga=([^;]*)/);
+      if (match) {
+        const parts = match[1].split('.');
+        if (parts.length >= 2) {
+          clientId = `${parts[parts.length - 2]}.${parts[parts.length - 1]}`;
+        }
+      }
+    }
+
     const res = await fetch(`${getBaseUrl()}/payments/create-checkout-session`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ cartId, cartItemId }),
+      body: JSON.stringify({ cartId, cartItemId, clientId }),
     });
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}));
