@@ -1,8 +1,7 @@
-"use client";
-
-import React, { useEffect, useState, useCallback } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { fetchCategories } from "@/services/api";
 
 export interface Category {
   _id: string;
@@ -36,98 +35,23 @@ const formatCategoryName = (name: string): string => {
   return name.trim().toUpperCase();
 };
 
-export default function ShopCollection() {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+export default async function ShopCollection() {
+  let categories: Category[] = [];
+  let error: string | null = null;
 
-  const fetchCategories = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      let baseUrl = process.env.NEXT_PUBLIC_API_URL;
-      if (!baseUrl) {
-        if (process.env.NODE_ENV === 'development') {
-          baseUrl = "http://localhost:5000/api";
-        } else {
-          throw new Error("NEXT_PUBLIC_API_URL is not configured");
-        }
-      }
-      const res = await fetch(`${baseUrl}/categories`);
-
-      if (!res.ok) {
-        throw new Error(`Failed to fetch categories (${res.status})`);
-      }
-
-      const json = await res.json();
-
-      if (json.success && Array.isArray(json.data)) {
-        const activeCategories = json.data.filter(
-          (cat: Category) => cat.isActive === true
-        );
-        setCategories(activeCategories);
-      } else {
-        throw new Error(json.message || "Invalid categories data format");
-      }
-    } catch (err: unknown) {
-      if (process.env.NODE_ENV === 'development') {
-        console.error("Categories fetch error:", err);
-      }
-      setError("Unable to load categories. Please try again later.");
-    } finally {
-      setLoading(false);
+  try {
+    const data = await fetchCategories();
+    // fetchCategories from api.ts already handles the JSON unpacking, but we must ensure we only show active ones
+    categories = data.filter((cat) => cat.isActive === true);
+  } catch (err: unknown) {
+    if (typeof err === 'object' && err !== null && 'digest' in err && (err as { digest?: string }).digest === 'DYNAMIC_SERVER_USAGE') {
+      throw err;
     }
-  }, []);
-
-  useEffect(() => {
-    let isMounted = true;
-    
-    const initialFetch = async () => {
-      try {
-        let baseUrl = process.env.NEXT_PUBLIC_API_URL;
-        if (!baseUrl) {
-          if (process.env.NODE_ENV === 'development') {
-            baseUrl = "http://localhost:5000/api";
-          } else {
-            throw new Error("NEXT_PUBLIC_API_URL is not configured");
-          }
-        }
-        const res = await fetch(`${baseUrl}/categories`);
-
-        if (!res.ok) throw new Error(`Failed to fetch categories (${res.status})`);
-
-        const json = await res.json();
-
-        if (isMounted) {
-          if (json.success && Array.isArray(json.data)) {
-            const activeCategories = json.data.filter(
-              (cat: Category) => cat.isActive === true
-            );
-            setCategories(activeCategories);
-          } else {
-            throw new Error(json.message || "Invalid categories data format");
-          }
-        }
-      } catch (err: unknown) {
-        if (isMounted) {
-          if (process.env.NODE_ENV === 'development') {
-            console.error("Categories fetch error:", err);
-          }
-          setError("Unable to load categories. Please try again later.");
-        }
-      } finally {
-        if (isMounted) {
-          setLoading(false);
-        }
-      }
-    };
-
-    initialFetch();
-    
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+    if (process.env.NODE_ENV === 'development') {
+      console.error("Categories fetch error:", err);
+    }
+    error = "Unable to load categories. Please try again later.";
+  }
 
   return (
     <section className="w-full bg-pure-white text-obsidian-black tracking-wider">
@@ -169,29 +93,13 @@ export default function ShopCollection() {
             </div>
           </div>
 
-          {/* States */}
-          {loading && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-[#a89d7e]/30 border-b border-[#a89d7e]/30">
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="w-full aspect-[4/5] bg-gray-100 animate-pulse p-8" />
-              ))}
-            </div>
-          )}
-
-          {!loading && error && (
+          {error && (
             <div className="p-16 text-center border-b border-[#a89d7e]/30 bg-red-50/20">
               <p className="font-mono text-obsidian-black uppercase text-[13px] mb-6">{error}</p>
-              <button
-                onClick={fetchCategories}
-                className="group px-8 py-4 border border-obsidian-black text-obsidian-black font-mono text-[11px] uppercase tracking-widest hover:bg-obsidian-black hover:text-white transition-all inline-flex items-center"
-              >
-                <span className="inline-block w-1.5 h-1.5 bg-obsidian-black group-hover:bg-white mr-4 transition-colors"></span>
-                TRY AGAIN
-              </button>
             </div>
           )}
 
-          {!loading && !error && categories.length === 0 && (
+          {!error && categories.length === 0 && (
             <div className="p-16 text-center border-b border-[#a89d7e]/30">
               <p className="font-mono text-neutral-500 uppercase text-[13px]">
                 NO ACTIVE COLLECTIONS AVAILABLE AT THE MOMENT.
@@ -200,7 +108,7 @@ export default function ShopCollection() {
           )}
 
           {/* Categories Grid - Brutalist layout */}
-          {!loading && !error && categories.length > 0 && (
+          {!error && categories.length > 0 && (
             <div className="flex md:grid overflow-x-auto md:overflow-visible md:grid-cols-3 md:divide-x divide-[#a89d7e]/30 border-b border-[#a89d7e]/30 snap-x snap-mandatory scrollbar-hide gap-4 md:gap-0 p-6 md:p-0 bg-neutral-50/30 md:bg-transparent">
               {categories.map((category, idx) => {
                 const imageSrc =

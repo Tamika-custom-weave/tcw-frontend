@@ -44,11 +44,12 @@ export default async function FeaturedProducts() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-0 w-full">
-            {products.map((product) => (
+            {products.map((product, idx) => (
               <ProductCard 
                 key={product._id} 
                 product={product} 
                 quickViewType="drawer" 
+                priority={idx < 4}
               />
             ))}
           </div>

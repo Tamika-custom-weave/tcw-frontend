@@ -1,6 +1,6 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback, useMemo } from "react";
 import { 
   Cart, 
   fetchCart, 
@@ -30,20 +30,20 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  const refreshCart = async () => {
+  const refreshCart = useCallback(async () => {
     setIsLoading(true);
     const data = await fetchCart();
     setCart(data);
     setIsLoading(false);
-  };
+  }, []);
 
   // Fetch initial cart on mount
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     refreshCart();
-  }, []);
+  }, [refreshCart]);
 
-  const addToCart = async (payload: AddToCartPayload) => {
+  const addToCart = useCallback(async (payload: AddToCartPayload) => {
     const updatedCart = await apiAddToCart(payload);
     if (updatedCart) {
       setCart(updatedCart);
@@ -51,49 +51,49 @@ export function CartProvider({ children }: { children: ReactNode }) {
       return true;
     }
     return false;
-  };
+  }, []);
 
-  const updateQuantity = async (itemId: string, quantity: number) => {
+  const updateQuantity = useCallback(async (itemId: string, quantity: number) => {
     const updatedCart = await apiUpdateCartItem(itemId, quantity);
     if (updatedCart) {
       setCart(updatedCart);
       return true;
     }
     return false;
-  };
+  }, []);
 
-  const removeItem = async (itemId: string) => {
+  const removeItem = useCallback(async (itemId: string) => {
     const updatedCart = await apiRemoveCartItem(itemId);
     if (updatedCart) {
       setCart(updatedCart);
       return true;
     }
     return false;
-  };
+  }, []);
 
-  const clearCart = async () => {
+  const clearCart = useCallback(async () => {
     const updatedCart = await apiClearCart();
     if (updatedCart) {
       setCart(updatedCart);
       return true;
     }
     return false;
-  };
+  }, []);
+
+  const contextValue = useMemo(() => ({
+    cart, 
+    isLoading, 
+    isCartOpen, 
+    setIsCartOpen, 
+    refreshCart, 
+    addToCart, 
+    updateQuantity, 
+    removeItem, 
+    clearCart 
+  }), [cart, isLoading, isCartOpen, refreshCart, addToCart, updateQuantity, removeItem, clearCart]);
 
   return (
-    <CartContext.Provider 
-      value={{ 
-        cart, 
-        isLoading, 
-        isCartOpen, 
-        setIsCartOpen, 
-        refreshCart, 
-        addToCart, 
-        updateQuantity, 
-        removeItem, 
-        clearCart 
-      }}
-    >
+    <CartContext.Provider value={contextValue}>
       {children}
     </CartContext.Provider>
   );

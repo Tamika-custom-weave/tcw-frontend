@@ -143,6 +143,7 @@ export default function QuickViewDrawer({ product, isOpen, onClose }: QuickViewD
               src={imageSrc}
               alt={product.name}
               fill
+              sizes="(max-width: 768px) 100vw, 400px"
               className="object-contain"
             />
           </div>

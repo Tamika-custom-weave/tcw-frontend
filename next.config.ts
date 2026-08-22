@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "res.cloudinary.com",
       },
+      {
+        protocol: "https",
+        hostname: "picsum.photos",
+      },
     ],
   },
 
@@ -21,7 +25,7 @@ const nextConfig: NextConfig = {
       script-src 'self' 'unsafe-inline'${isDev ? " 'unsafe-eval'" : ""};
       style-src 'self' 'unsafe-inline';
       connect-src 'self' https://api.tamikascustomweaves.com${isDev ? " http://localhost:5000 ws://localhost:3000 wss://localhost:3000" : ""};
-      img-src 'self' data: blob: https://res.cloudinary.com;
+      img-src 'self' data: blob: https://res.cloudinary.com https://picsum.photos;
       font-src 'self';
       frame-src 'none';
       frame-ancestors 'none';

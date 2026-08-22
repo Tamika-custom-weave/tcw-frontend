@@ -24,6 +24,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${noto.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-brand-white text-brand-black">

@@ -73,6 +73,7 @@ export default function Navbar() {
                   alt="Tamika's Custom Weave"
                   width={180}
                   height={48}
+                  style={{ width: "auto" }}
                   className="h-[36px] md:h-[48px] w-auto object-contain"
                   priority
                 />

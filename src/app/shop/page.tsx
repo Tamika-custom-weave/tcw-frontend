@@ -57,8 +57,8 @@ export default async function ShopPage({ searchParams }: ShopPageProps) {
             <div className="pb-16 w-full">
               {activeProducts.length > 0 ? (
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-0 border-t border-[#e5e7eb] w-full">
-                  {activeProducts.map((product) => (
-                    <ProductCard key={product._id} product={product} quickViewType="modal" />
+                  {activeProducts.map((product, idx) => (
+                    <ProductCard key={product._id} product={product} quickViewType="modal" priority={idx < 6} />
                   ))}
                 </div>
               ) : (

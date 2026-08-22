@@ -12,9 +12,10 @@ const QuickViewDrawer = dynamic(() => import("./QuickViewDrawer"));
 interface ProductCardProps {
   product: Product;
   quickViewType?: "modal" | "drawer" | "none";
+  priority?: boolean;
 }
 
-export default function ProductCard({ product, quickViewType = "none" }: ProductCardProps) {
+export default function ProductCard({ product, quickViewType = "none", priority = false }: ProductCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const imageSrc = product.thumbnail?.url || product.images?.[0]?.url || "/products.jpg";
@@ -66,6 +67,7 @@ export default function ProductCard({ product, quickViewType = "none" }: Product
               src={imageSrc}
               alt={product.name}
               fill
+              priority={priority}
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
               className="object-contain group-hover:scale-105 transition-all duration-700 ease-out"
             />

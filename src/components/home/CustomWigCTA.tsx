@@ -61,6 +61,7 @@ export default function CustomWigCTA() {
                       src="/products.jpg" 
                       alt="Custom Wig Craftsmanship" 
                       fill 
+                      sizes="(max-width: 768px) 100vw, 500px"
                       className="object-cover opacity-80"
                     />
                  </div>
