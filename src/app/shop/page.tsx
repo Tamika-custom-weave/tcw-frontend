@@ -3,8 +3,47 @@ import { fetchCategories, fetchProducts, fetchProductsByCategory } from "@/servi
 import ProductCard from "@/components/shop/ProductCard";
 import ShopControls from "@/components/shop/ShopControls";
 
+import { Metadata } from "next";
+
 interface ShopPageProps {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+export async function generateMetadata({ searchParams }: ShopPageProps): Promise<Metadata> {
+  const resolvedSearchParams = await searchParams;
+  const categorySlug = typeof resolvedSearchParams.category === "string" ? resolvedSearchParams.category : undefined;
+
+  if (categorySlug) {
+    const categories = await fetchCategories();
+    const selectedCategory = categories.find((c) => c.slug === categorySlug);
+    if (selectedCategory) {
+      return {
+        title: `${selectedCategory.name} Collection`,
+        description: `Shop our premium ${selectedCategory.name.toLowerCase()} hair extensions and wigs.`,
+        openGraph: {
+          title: `${selectedCategory.name} Collection | Tamika Custom Weave`,
+          description: `Shop our premium ${selectedCategory.name.toLowerCase()} hair extensions and wigs.`,
+          url: `https://www.tamikascustomweaves.com/shop?category=${categorySlug}`,
+        },
+        alternates: {
+          canonical: `https://www.tamikascustomweaves.com/shop?category=${categorySlug}`,
+        }
+      };
+    }
+  }
+
+  return {
+    title: "Shop All Collections",
+    description: "Shop all luxury hair extensions, bundles, and custom wigs from Tamika Custom Weave.",
+    openGraph: {
+      title: "Shop All Collections | Tamika Custom Weave",
+      description: "Shop all luxury hair extensions, bundles, and custom wigs from Tamika Custom Weave.",
+      url: "https://www.tamikascustomweaves.com/shop",
+    },
+    alternates: {
+      canonical: "https://www.tamikascustomweaves.com/shop",
+    }
+  };
 }
 
 export default async function ShopPage({ searchParams }: ShopPageProps) {

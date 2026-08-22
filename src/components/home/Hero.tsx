@@ -127,9 +127,15 @@ export default function Hero() {
                         {slide.tag}
                       </span>
                     </div>
-                    <h1 className="text-[36px] sm:text-[48px] md:text-[60px] lg:text-[76px] xl:text-[84px] leading-[0.95] text-pure-white uppercase font-mono mb-6 lg:mb-8 whitespace-pre-line font-medium break-words">
-                      {slide.title}
-                    </h1>
+                    {idx === 0 ? (
+                      <h1 className="text-[36px] sm:text-[48px] md:text-[60px] lg:text-[76px] xl:text-[84px] leading-[0.95] text-pure-white uppercase font-mono mb-6 lg:mb-8 whitespace-pre-line font-medium break-words">
+                        {slide.title}
+                      </h1>
+                    ) : (
+                      <h2 className="text-[36px] sm:text-[48px] md:text-[60px] lg:text-[76px] xl:text-[84px] leading-[0.95] text-pure-white uppercase font-mono mb-6 lg:mb-8 whitespace-pre-line font-medium break-words">
+                        {slide.title}
+                      </h2>
+                    )}
                     <p className="text-[12px] sm:text-[13px] lg:text-[14px] leading-relaxed text-concrete-gray font-mono max-w-md lg:max-w-lg mb-8 lg:mb-10 uppercase tracking-[0.05em]">
                       {slide.subtitle}
                     </p>

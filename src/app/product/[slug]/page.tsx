@@ -1,12 +1,44 @@
 import React from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Metadata, ResolvingMetadata } from "next";
 import { fetchProductBySlug } from "@/services/api";
 import ProductGallery from "@/components/shop/ProductGallery";
 import ProductSelectors from "@/components/shop/ProductSelectors";
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
+}
+
+export async function generateMetadata(
+  { params }: ProductPageProps,
+  parent: ResolvingMetadata
+): Promise<Metadata> {
+  const resolvedParams = await params;
+  const product = await fetchProductBySlug(resolvedParams.slug);
+
+  if (!product || !product.isActive) {
+    return {
+      title: "Product Not Found",
+    };
+  }
+
+  const previousImages = (await parent).openGraph?.images || [];
+  const productImage = product.thumbnail?.url || product.images?.[0]?.url;
+
+  return {
+    title: product.name,
+    description: product.description || `Buy ${product.name} at Tamika Custom Weave.`,
+    openGraph: {
+      title: product.name,
+      description: product.description || `Buy ${product.name} at Tamika Custom Weave.`,
+      url: `https://www.tamikascustomweaves.com/product/${product.slug}`,
+      images: productImage ? [{ url: productImage }] : previousImages,
+    },
+    alternates: {
+      canonical: `https://www.tamikascustomweaves.com/product/${product.slug}`,
+    }
+  };
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
@@ -17,8 +49,37 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
+  const defaultImage = product.thumbnail?.url || product.images?.[0]?.url || "https://www.tamikascustomweaves.com/products.jpg";
+  const minPrice = product.variants?.length > 0 
+    ? Math.min(...product.variants.map(v => v.price)) 
+    : 0;
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    image: defaultImage,
+    description: product.description || `Buy ${product.name} at Tamika Custom Weave.`,
+    sku: product._id,
+    offers: {
+      "@type": "AggregateOffer",
+      url: `https://www.tamikascustomweaves.com/product/${product.slug}`,
+      priceCurrency: "USD",
+      lowPrice: minPrice,
+      availability: "https://schema.org/InStock",
+      seller: {
+        "@type": "Organization",
+        name: "Tamika Custom Weave",
+      },
+    },
+  };
+
   return (
     <div className="w-full min-h-screen bg-pure-white flex flex-col">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* Breadcrumb / Top Bar */}
       <div className="w-full border-b border-[#a89d7e]/30 py-4 px-6 sm:px-10 md:px-14 lg:px-20">
         <div className="flex items-center gap-2 text-[10px] tracking-[0.15em] uppercase font-mono font-medium text-iron-gray">
